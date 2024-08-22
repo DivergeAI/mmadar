@@ -31,8 +31,7 @@ const Text = ({
             sx={{
                 fontWeight,
                 fontSize,
-                color: color || theme.palette.text.primary,
-                overflow: 'hidden',
+                color: color || theme.palette.grey[800],
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: lines,

@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import Sidebar, { drawerWidth } from '../components/common/Sidebar';
+import Home from './Home';
 
 function Layout() {
     return (
@@ -7,10 +8,11 @@ function Layout() {
             <Sidebar />
           <Box
           component={'main'}
-          sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+          sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } ,
+          height : '100vh',
+        boxSizing : 'border-box'}}
             >
-               Content
-
+<Home />
           </Box>
         </Box>
     );

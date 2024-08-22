@@ -105,6 +105,50 @@ const LightTheme = createTheme({
           }),
         },
       },
+      MuiButtonBase:{
+        styleOverrides :{
+          root : {
+            padding : '0',
+          },
+          
+        },
+
+      },
+      MuiIconButton :{
+        styleOverrides :{
+          root : {
+            padding : '0',
+            '&:focus, &:focus-visible': {
+              outline: 'none',
+            },
+          'hover' : {
+            backgroundColor : 'transparent !important',
+          }
+          },
+          
+        },
+      },
+      MuiMenu:{
+        styleOverrides :{
+          paper : {
+            borderRadius : '12px',
+            boxShadow : '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          },
+        },
+      },
+      MuiMenuItem:{
+        styleOverrides :{
+          root : {
+            padding : '0.5rem 1rem',
+            display : 'flex',
+            alignItems : 'center',
+            '&:hover' : {
+              backgroundColor : '#F9F9F9',
+            },
+          },
+        },
+      },
+      
       
       
     },
@@ -123,7 +167,8 @@ const LightTheme = createTheme({
         },
       grey: {
         200 : '#F9F9F9',
-        300 : 'rgb(236 236 236)',
+        300 : '#cdcdcd4d',
+        400 : 'rgb(236 236 236)',
         800 : '#262626'
       },
       primary: {
