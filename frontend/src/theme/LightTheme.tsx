@@ -117,7 +117,8 @@ const LightTheme = createTheme({
       MuiIconButton :{
         styleOverrides :{
           root : {
-            padding : '0',
+            padding : '0.3rem',
+            borderRadius : '8px',
             '&:focus, &:focus-visible': {
               outline: 'none',
             },
@@ -148,6 +149,17 @@ const LightTheme = createTheme({
           },
         },
       },
+
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: '#262626',
+            color: '#FFFFFF',
+            borderRadius: '8px',
+            fontSize: '12px',
+          },
+        },
+      },
       
       
       
@@ -164,12 +176,15 @@ const LightTheme = createTheme({
         background : {
             default : '#FFFFFF',
             paper : '#F9F9F9',
+
         },
       grey: {
         200 : '#F9F9F9',
         300 : '#cdcdcd4d',
         400 : 'rgb(236 236 236)',
-        800 : '#262626'
+        500 : '#b4b4b4',
+        600 : '#ececec',
+        800 : '#262626',
       },
       primary: {
         main: '#9657C8',
@@ -189,6 +204,10 @@ const LightTheme = createTheme({
       error: {
         main: '#DC3545',
       },
+      common: {
+        white: '#FFFFFF',
+        black: '#000000',
+      }
     },
    
     

@@ -50,6 +50,11 @@ export default function SelectMenu({
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
+        size="small"
+        sx={{
+            padding : '0 !important',
+            backgroundColor : 'transparent !important',
+        }}
       >
         {icon}
       </IconButton>

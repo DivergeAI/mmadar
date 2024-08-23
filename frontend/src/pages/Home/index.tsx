@@ -2,6 +2,7 @@ import { Box, useTheme } from '@mui/material';
 import React from 'react';
 import Text from '../../components/common/Text';
 import ChatSection from './ChatSection';
+import SearchSection from './SearchSection';
 
 function Home() {
     const theme = useTheme();
@@ -11,7 +12,6 @@ function Home() {
             flexDirection={'column'}
             width={'100%'}
             height={'100%'}
-            border='1px solid green'
             p={2}
             boxSizing={'border-box'}
             gap={4}
@@ -23,9 +23,11 @@ function Home() {
 {/* Main Section */}
 
             <Box
+            width={"100%"}
+            maxWidth={{sm:'100%' , lg: '64rem'} }
+            margin={'auto'}
                 flexGrow={1}
                 sx={{ overflowY: 'auto' }}
-                border={'1px solid red'}
             >
                 <ChatSection />
                
@@ -33,14 +35,14 @@ function Home() {
 
             {/* Search Section */}
 
-            <div>
+            <Box 
+            width={"100%"}
+                maxWidth = {{sm:'100%' , lg: '72rem'} }
+                margin={'auto'}
+                padding={"1.5rem"}
+            >
 
-                <Box
-                    border={'1px solid yellow'}
-
-                >
-                    Search
-                </Box>
+               <SearchSection />    
                 <Text
 
                     sx={{
@@ -49,7 +51,7 @@ function Home() {
                     }}>
                     LLMs can make mistakes. Verify important information.
                 </Text>
-            </div>
+            </Box>
 
         </Box>
     );

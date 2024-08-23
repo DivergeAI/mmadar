@@ -1,3 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+pre{
+    white-space: pre-wrap;
+}
+
+#question-div .copy-buttons{
+visibility: hidden;
+}
+
+
+
+#question-div:hover .copy-buttons{
+    visibility: visible;
+    }
+
+
+    #answer-div .controls{
+        visibility: hidden;
+    }
+    
+    #answerBlock:last-child .controls{
+        visibility: visible;
+    }
+
+#answer-div:hover .controls{
+    visibility: visible;
+    }
+
 ::-webkit-scrollbar {
     /* width: 4px; */
     display: none;
