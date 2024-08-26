@@ -160,6 +160,17 @@ const LightTheme = createTheme({
           },
         },
       },
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            fontSize: '1.5rem',
+            width : 'inherit',
+            height : 'inherit',
+            
+          },
+        },
+      },
+      
       
       
       

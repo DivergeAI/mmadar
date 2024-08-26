@@ -21,7 +21,7 @@ visibility: hidden;
     }
 
 
-    #answer-div .controls{
+    #answer-div .controls ,.time-text{
         visibility: hidden;
     }
     
@@ -29,7 +29,7 @@ visibility: hidden;
         visibility: visible;
     }
 
-#answer-div:hover .controls{
+#answer-div:hover .controls ,.time-text{
     visibility: visible;
     }
 

@@ -1,6 +1,7 @@
 import { AddOutlined, ArrowUpwardOutlined, Mic } from "@mui/icons-material";
 import {
   Box,
+  Icon,
   IconButton,
   InputAdornment,
   TextField,
@@ -36,7 +37,10 @@ function SearchSection() {
               <InputAdornment position="start">
                 <Tooltip title="More">
                   <IconButton>
+                    <Icon fontSize="small">
+
                     <AddOutlined />
+                    </Icon>
                   </IconButton>
                 </Tooltip>
               </InputAdornment>
@@ -45,7 +49,9 @@ function SearchSection() {
               <InputAdornment position="end">
                 <Tooltip title="Record Voice">
                   <IconButton>
-                    <Mic />
+                    <Icon fontSize="small">
+                      <Mic />   
+                    </Icon>
                   </IconButton>
                 </Tooltip>
               </InputAdornment>
@@ -80,7 +86,10 @@ function SearchSection() {
               color: theme.palette.common.white,
             }}
           >
+            <Icon>
+
             <ArrowUpwardOutlined />
+            </Icon>
           </IconButton>
         </Tooltip>
       </Box>

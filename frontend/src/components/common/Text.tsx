@@ -13,6 +13,7 @@ type TextProps = {
     dangerouslySetInnerHTML?: {
         __html: string;
     };
+    props ?: any
 }
 
 const Text = ({
@@ -22,7 +23,9 @@ const Text = ({
     children,
     lines,
     sx = {},
+
     dangerouslySetInnerHTML,
+    ...props
 }: TextProps) => {
 
     const theme = useTheme()
@@ -37,6 +40,7 @@ const Text = ({
                 WebkitLineClamp: lines,
                 WebkitBoxOrient: 'vertical',
                 ...sx,
+                ...props
             }}
             dangerouslySetInnerHTML={dangerouslySetInnerHTML}
         >

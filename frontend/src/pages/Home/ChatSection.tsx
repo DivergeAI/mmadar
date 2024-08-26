@@ -44,13 +44,26 @@ function ChatSection() {
      className="copy-buttons"         
  >
     <Tooltip title='Copy'>
-   <IconButton>
+   <IconButton 
+   sx={{
+        padding: '0.2rem !important',
+        fontSize: '1rem',
+        // backgroundColor: theme.palette.grey[600],
+        '&:hover': {
+        backgroundColor: theme.palette.grey[600]
+        }
+   }}>
+    <Icon fontSize="small">
      <CopyAllOutlined />
+     </Icon>
    </IconButton>
    </Tooltip>
    <Tooltip title='Edit'>
    <IconButton>
+    <Icon fontSize="small">
+
      <EditOutlined />
+    </Icon>
    </IconButton>
    </Tooltip>
  </Box>
@@ -65,9 +78,18 @@ function ChatSection() {
             {/* modal name & time (when hiver) */}
             <Box display={'flex'} gap={1} alignItems={'center'}>
             <Text fontSize="14px" fontWeight="600">Model Name</Text>
-            <Text fontSize="0.75rem" fontWeight="500" color= {theme.palette.grey[500]} sx={{
+
+            <Text 
+            fontSize="0.75rem" 
+            fontWeight="500" 
+            color= {theme.palette.grey[500]}
+             sx={{
                 textTransform: 'uppercase'
-            }}>11:01Am</Text>
+            }}
+            props={{
+                className: 'time-text'
+            }}
+            >11:01Am</Text>
 
             </Box>
             {/* answer */}
