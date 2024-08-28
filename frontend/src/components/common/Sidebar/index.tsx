@@ -9,7 +9,6 @@ export const drawerWidth = 270;
 
 function Sidebar() {
     const theme = useTheme();
-    const colorMode = useContext(ColorModeContext)
 // states
 
     return (

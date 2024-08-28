@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MoreHoriz } from '@mui/icons-material';
-import { ListItemIcon, useTheme } from '@mui/material';
+import { Divider, Icon, ListItemIcon, useTheme } from '@mui/material';
 import Text from './Text';
 
 const ITEM_HEIGHT = 48;
@@ -12,6 +12,7 @@ interface MenuOption {
   name: string;
   onClick: () => void;
   icon?: React.ReactNode;
+  divider?: boolean;
 }
 
 interface SelectMenuProps {
@@ -43,17 +44,18 @@ export default function SelectMenu({
   };
 
   return (
-    <div>
+    <div >
       <IconButton
         aria-label="more"
         aria-controls={open ? 'menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
-        size="small"
         sx={{
             padding : '0 !important',
             backgroundColor : 'transparent !important',
+            width : '24px',
+            height : '24px',
         }}
       >
         {icon}
@@ -77,7 +79,8 @@ export default function SelectMenu({
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option.name} onClick={() => handleOptionClick(option)}>
+          <>
+           <MenuItem key={option.name} onClick={() => handleOptionClick(option)}>
           {option?.icon &&   <ListItemIcon sx={{
                 color: theme.palette.grey[800],
                 width: '16px',
@@ -89,6 +92,9 @@ export default function SelectMenu({
             {option.name}
             </Text>
           </MenuItem>
+          {option?.divider && <Divider />}
+          </>
+         
         ))}
       </Menu>
     </div>

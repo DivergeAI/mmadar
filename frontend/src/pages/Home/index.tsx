@@ -3,6 +3,8 @@ import React from 'react';
 import Text from '../../components/common/Text';
 import ChatSection from './ChatSection';
 import SearchSection from './SearchSection';
+import HeaderSection from './HeaderSection';
+import NewChatPage from './NewChatPage';
 
 function Home() {
     const theme = useTheme();
@@ -16,20 +18,23 @@ function Home() {
             boxSizing={'border-box'}
             gap={4}
         >
-            <Box>
-                Header
-            </Box>
+           <HeaderSection />
 
-{/* Main Section */}
+        {/* Main Section */}
+
 
             <Box
             width={"100%"}
+            height={'100%'}
             maxWidth={{sm:'100%' , lg: '64rem'} }
             margin={'auto'}
                 flexGrow={1}
                 sx={{ overflowY: 'auto' }}
+                // border={'1px solid'}
             >
-                <ChatSection />
+                {/* <ChatSection /> */}
+                
+                <NewChatPage />
                
             </Box>
 
@@ -39,7 +44,7 @@ function Home() {
             width={"100%"}
                 maxWidth = {{sm:'100%' , lg: '72rem'} }
                 margin={'auto'}
-                padding={"1.5rem"}
+                padding={"1.5rem 1.5rem 0"}
             >
 
                <SearchSection />    
@@ -48,6 +53,7 @@ function Home() {
                     sx={{
                         display: 'block',
                         textAlign: 'center',
+                        marginTop: '0.5rem',
                     }}>
                     LLMs can make mistakes. Verify important information.
                 </Text>

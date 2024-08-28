@@ -115,7 +115,7 @@ function AnswerControls() {
               {responseType === 'good' ? 'Tell us more about the good response:' : 'Tell us more about the bad response:'}
             </Text>
             <IconButton onClick={() => setResponseType(null)}>
-              <Icon>
+              <Icon fontSize='small'>
                 <Close fontSize={'small'} />
               </Icon>
             </IconButton>

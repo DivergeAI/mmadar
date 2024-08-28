@@ -38,6 +38,7 @@ const Text = ({
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: lines,
+                overflow: 'hidden',
                 WebkitBoxOrient: 'vertical',
                 ...sx,
                 ...props

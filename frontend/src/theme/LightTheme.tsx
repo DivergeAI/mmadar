@@ -187,7 +187,6 @@ const LightTheme = createTheme({
         background : {
             default : '#FFFFFF',
             paper : '#F9F9F9',
-
         },
       grey: {
         200 : '#F9F9F9',
@@ -195,7 +194,9 @@ const LightTheme = createTheme({
         400 : 'rgb(236 236 236)',
         500 : '#b4b4b4',
         600 : '#ececec',
+        700 : '#9b9b9b',
         800 : '#262626',
+        900 : '#4e4e4e',
       },
       primary: {
         main: '#9657C8',
@@ -218,7 +219,14 @@ const LightTheme = createTheme({
       common: {
         white: '#FFFFFF',
         black: '#000000',
-      }
+      },
+      customRed: {
+        main: '#fca5a5',
+        light: '#f87171',
+        dark: '#b91c1c',
+        contrastText: '#FFFFFF',
+      },
+
     },
    
     

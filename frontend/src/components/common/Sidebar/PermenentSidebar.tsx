@@ -5,18 +5,20 @@ import {
   useTheme,
   InputAdornment,
   Avatar,
+  Icon,
 } from "@mui/material";
 import { drawerWidth } from ".";
 import Text from "../Text";
 import SearchIcon from "@mui/icons-material/Search";
 import ChatItem from "./ChatItem";
 import SelectMenu from "../SelectMenu";
+import { NavLink } from "react-router-dom";
 
-const   options=[
-  { name: 'Profile', onClick: () => console.log('Profile clicked') },
-  { name: 'Settings', onClick: () => console.log('Settings clicked') },
-  { name: 'Logout', onClick: () => console.log('Logout clicked') }
-]
+const options = [
+  { name: "Profile", onClick: () => console.log("Profile clicked") },
+  { name: "Settings", onClick: () => console.log("Settings clicked") },
+  { name: "Logout", onClick: () => console.log("Logout clicked") },
+];
 
 function PermenentSidebar() {
   const theme = useTheme();
@@ -30,7 +32,7 @@ function PermenentSidebar() {
         "& .MuiDrawer-paper": {
           boxSizing: "border-box",
           width: drawerWidth,
-          height: "100vh", // Set height to full viewport
+          height: "100vh", // Full viewport height
           background: theme.palette.background.paper,
           border: 0,
           borderTopRightRadius: 16,
@@ -39,12 +41,13 @@ function PermenentSidebar() {
       }}
     >
       <Box
-        p={1}
+        py={1}
+        px={1.5}
         width="100%"
-        height="100%" // Make the Box take full height
+        height="100%"
         display="flex"
         flexDirection="column"
-        boxSizing={"border-box"}
+        boxSizing="border-box"
       >
         {/* Logo & New Chat */}
         <Box
@@ -52,19 +55,21 @@ function PermenentSidebar() {
           justifyContent="space-between"
           alignItems="center"
           gap={1}
-          p={1}
+        >
+          <Box 
+          component={NavLink}
+          to="/"
+          display="flex" alignItems="center" p={1} gap={2} flexGrow={1}
           sx={{
             cursor: "pointer",
             "&:hover": {
               backgroundColor: theme.palette.grey[300],
               borderRadius: "12px",
             },
-          }}
-        >
-          <Box display="flex" alignItems="center" gap={2} flexGrow={1}>
+          }}>
             <img
               src="../src/assets/favicon.png"
-              alt=""
+              alt="Logo"
               width="24px"
               height="24px"
             />
@@ -73,7 +78,7 @@ function PermenentSidebar() {
             </Text>
             <img
               src="../src/assets/svgs/edit.svg"
-              alt=""
+              alt="Edit"
               width="20px"
               height="20px"
               style={{ marginLeft: "auto" }}
@@ -93,7 +98,7 @@ function PermenentSidebar() {
           >
             <img
               src="../src/assets/svgs/humburger.svg"
-              alt=""
+              alt="Menu"
               width="20px"
               height="20px"
             />
@@ -102,6 +107,8 @@ function PermenentSidebar() {
 
         {/* WorkSpace */}
         <Box
+        component={NavLink}
+        to="/workspace"
           sx={{
             p: 1,
             cursor: "pointer",
@@ -114,7 +121,7 @@ function PermenentSidebar() {
           <Box display="flex" alignItems="center" gap={2}>
             <img
               src="../src/assets/svgs/workspace.svg"
-              alt=""
+              alt="Workspace"
               width="17.6px"
               height="17.6px"
             />
@@ -132,7 +139,9 @@ function PermenentSidebar() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <Icon>
+                    <SearchIcon />
+                  </Icon>
                 </InputAdornment>
               ),
             }}
@@ -147,20 +156,29 @@ function PermenentSidebar() {
           />
         </Box>
 
-        {/* Chats - This is the scrollable area */}
+        {/* Chats - Scrollable Area */}
         <Box
           sx={{
+            width: "100%",
             flexGrow: 1,
             overflowY: "auto",
             p: 1,
           }}
         >
-          {Array.from({ length: 15 }).map((_, index) => (
+          {/* {Array.from({ length: 15 }).map((_, index) => (
             <ChatItem key={index} />
-          ))}
+          ))} */}
+          <Box 
+          display={'flex'}
+          flexDirection={'column'}
+          gap={1}>
+  <ChatItem to="/chat/1" chatName="Chat 1" />
+  <ChatItem to="/chat/2" chatName="Chat 2" />
+  <ChatItem to="/chat/3" chatName="Chat 3" />
+</Box>
         </Box>
 
-        {/* Bottom */}
+        {/* Bottom - User Avatar and Menu */}
         <Box
           sx={{
             p: 1,
@@ -169,16 +187,15 @@ function PermenentSidebar() {
               backgroundColor: theme.palette.grey[300],
               borderRadius: "12px",
             },
-            mt:2
-          }}>
+            mt: 2,
+          }}
+        >
           <Box display="flex" alignItems="center" gap={2}>
-          <SelectMenu  options={options} icon = { <Avatar />}/>
-
+            <Avatar />
             <Text fontWeight="600" color={theme.palette.grey[800]}>
-             User Name
+              User Name
             </Text>
           </Box>
-
         </Box>
       </Box>
     </Drawer>

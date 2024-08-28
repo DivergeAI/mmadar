@@ -10,10 +10,26 @@ pre{
     white-space: pre-wrap;
 }
 
+#chat-item .menu-icon{
+    visibility: hidden;
+}
+
+#chat-item:hover .menu-icon,
+#chat-item.active .menu-icon {
+  visibility: visible;
+}
+
+
 #question-div .copy-buttons{
 visibility: hidden;
 }
 
+#upload-file-display .close-icon{
+    visibility: hidden;
+}
+#upload-file-display:hover .close-icon{
+    visibility: visible;
+}
 
 
 #question-div:hover .copy-buttons{

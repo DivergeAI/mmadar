@@ -1,14 +1,15 @@
-import { Fragment } from 'react'
+import { Route, RouterProvider, Routes } from 'react-router-dom'
 import './App.css'
 import Layout from './pages/layout'
 import { ThemeProvider } from './theme/ThemeProvider'
+import Home from './pages/Home'
+import Workspace from './pages/Workspace'
+import { router } from './routes'
 
 function App() {
 
   return (
-    <ThemeProvider>
-      <Layout />
-    </ThemeProvider>
+    <RouterProvider router={router}/>
   )
 }
 

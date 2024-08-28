@@ -1,11 +1,10 @@
-import { Avatar, Box, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
-import { useState } from "react";
+import {  Box, useTheme } from "@mui/material";
 import Text from "../Text";
 import { ArchiveOutlined, BookmarkBorderOutlined, ContentCopyOutlined, CreateOutlined, Delete, MoreHoriz, Pin, Settings, Share } from "@mui/icons-material";
 import SelectMenu from "../SelectMenu";
+import { NavLink } from "react-router-dom";
 
-
-const options = [
+export const options = [
     {
         name: 'Pin',
         icon: <BookmarkBorderOutlined />,
@@ -20,16 +19,14 @@ const options = [
         name: 'Clone',
         icon: <ContentCopyOutlined />,
         onClick: () => console.log('Logout clicked')
-    }
-    ,
+    },
     {
         name: 'Settings',
         icon: <Settings />,
         onClick: () => console.log('Settings clicked')
     },
-
     {
-        name: 'Archieve',
+        name: 'Archive',
         icon: <ArchiveOutlined />,
         onClick: () => console.log('Profile clicked')
     },
@@ -46,18 +43,26 @@ const options = [
     { name: 'Logout', onClick: () => console.log('Logout clicked') }
 ]
 
-
-const ChatItem = () => {
+const ChatItem = ({ to, chatName }: any) => {
     const theme = useTheme();
 
     return (
         <Box
+            component={NavLink}
+            to={to}
+            id="chat-item"
             sx={{
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
                 p: 1,
                 cursor: "pointer",
+                textDecoration: "none",
+                color: theme.palette.text.primary,
+                "&.active": {
+                    backgroundColor: theme.palette.grey[300], // Set active background color
+                    borderRadius: "12px",
+                },
                 "&:hover": {
                     backgroundColor: theme.palette.grey[300],
                     borderRadius: "12px",
@@ -65,16 +70,14 @@ const ChatItem = () => {
                 flexGrow: 1,
             }}
         >
-
             <Text fontWeight="500" color={theme.palette.grey[800]}>
-                New Chat
+                {chatName}
             </Text>
-            <Box marginLeft={'auto'}>
-
+            <Box marginLeft={"auto"} className="menu-icon">
                 <SelectMenu options={options} />
             </Box>
         </Box>
-    )
-}
+    );
+};
 
 export default ChatItem;

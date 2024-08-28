@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import Sidebar, { drawerWidth } from '../components/common/Sidebar';
 import Home from './Home';
+import { Outlet, RouterProvider } from 'react-router-dom';
+import { router } from '../routes';
 
 function Layout() {
     return (
@@ -12,7 +14,7 @@ function Layout() {
           height : '100vh',
         boxSizing : 'border-box'}}
             >
-<Home />
+          <Outlet />
           </Box>
         </Box>
     );
