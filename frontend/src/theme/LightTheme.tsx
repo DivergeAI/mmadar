@@ -187,7 +187,8 @@ const LightTheme = createTheme({
         background : {
             default : '#FFFFFF',
             paper : '#F9F9F9',
-        },
+            main : '#0000001a'
+          },
       grey: {
         200 : '#F9F9F9',
         300 : '#cdcdcd4d',
@@ -197,6 +198,7 @@ const LightTheme = createTheme({
         700 : '#9b9b9b',
         800 : '#262626',
         900 : '#4e4e4e',
+        
       },
       primary: {
         main: '#9657C8',

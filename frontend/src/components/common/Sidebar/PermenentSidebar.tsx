@@ -11,14 +11,8 @@ import { drawerWidth } from ".";
 import Text from "../Text";
 import SearchIcon from "@mui/icons-material/Search";
 import ChatItem from "./ChatItem";
-import SelectMenu from "../SelectMenu";
 import { NavLink } from "react-router-dom";
 
-const options = [
-  { name: "Profile", onClick: () => console.log("Profile clicked") },
-  { name: "Settings", onClick: () => console.log("Settings clicked") },
-  { name: "Logout", onClick: () => console.log("Logout clicked") },
-];
 
 function PermenentSidebar() {
   const theme = useTheme();

@@ -44,7 +44,7 @@ export default function SelectMenu({
   };
 
   return (
-    <div >
+    <div>
       <IconButton
         aria-label="more"
         aria-controls={open ? 'menu' : undefined}

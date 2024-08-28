@@ -166,7 +166,7 @@ function SearchSection() {
             onClick={handleUploadFiles}
           >
             <Icon fontSize="small">
-              <FileUploadSharp fontSize="24px" />
+              <FileUploadSharp />
             </Icon>
             <Text
               sx={{
