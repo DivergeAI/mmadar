@@ -77,7 +77,8 @@ const LightTheme = createTheme({
   
               },
               '&[placeholder]': {
-  fontSize : '14px',
+  fontSize : '14px !important',
+  fontFamily : 'Open Sans',
               }
   
             },
@@ -94,21 +95,23 @@ const LightTheme = createTheme({
       },
       MuiButton: {
         styleOverrides: {
-          root: ({ ownerState }) => ({
-            ...(ownerState.variant === 'contained' &&
-              ownerState.color === 'warning' && {
-                '&:disabled': {
-                backgroundColor: '#FFC107',
-                color: '#fff',
-                }
-              }),
-          }),
+          root: {
+          '&:hover': {
+            border : 'none',
+          },
+          '&:focus': {
+            outline : 'none',
+          
+          }
+
         },
       },
+    },
       MuiButtonBase:{
         styleOverrides :{
           root : {
             padding : '0',
+            
           },
           
         },

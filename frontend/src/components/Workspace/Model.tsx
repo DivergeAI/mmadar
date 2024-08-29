@@ -1,8 +1,8 @@
 import { Avatar, Icon, IconButton, Stack, Tooltip } from '@mui/material';
 import React from 'react';
-import Text from './Text';
+import Text from '../common/Text';
 import { Edit } from '@mui/icons-material';
-import SelectMenu from './SelectMenu';
+import SelectMenu from '../common/SelectMenu';
 import { NavLink } from 'react-router-dom';
 
 const Model = ({model}:any) => {

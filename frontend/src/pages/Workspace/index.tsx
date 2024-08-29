@@ -50,6 +50,7 @@ function Workspace() {
                     }}>
                     {WorkspaceRoute.map((route, index) => (
                         <NavLink
+                        key={route.to}
                             to={route.to}
                             style={({ isActive }) => ({
                                 textDecoration: 'none',

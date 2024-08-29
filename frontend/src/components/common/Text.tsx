@@ -19,7 +19,7 @@ type TextProps = {
 const Text = ({
     fontWeight = '400',
     fontSize = '14px',
-    color,
+    color = 'grey.800',
     children,
     lines,
     sx = {},
@@ -41,9 +41,9 @@ const Text = ({
                 overflow: 'hidden',
                 WebkitBoxOrient: 'vertical',
                 ...sx,
-                ...props
             }}
             dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+{...props}
         >
             {children}
         </Typography>
