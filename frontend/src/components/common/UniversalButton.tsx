@@ -47,6 +47,7 @@ const UniversalButton = ({
       sx={{
         width,
         height,
+        fontSize,
         color: textColor,
         border,
         borderRadius: '8px',

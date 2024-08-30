@@ -6,9 +6,9 @@ const LightTheme = createTheme({
         styleOverrides: {
           paper: {
             backgroundColor: '#FAFAFA',
-            borderRadius: '8px',
+            borderRadius: "12px",
             padding: '0%',
-            minHeight: '40%',
+            minHeight: 'fit-content',
             maxHeight: '70%',
             '@media (max-width: 600px)': {
               width: '100%',
@@ -61,6 +61,7 @@ const LightTheme = createTheme({
             },
             input: {
               padding : '0.5rem 0.9rem',
+              fontFamily : 'system-ui',
               '&[type=number]': {
                 '-moz-appearance': 'textfield',
               },
@@ -72,16 +73,18 @@ const LightTheme = createTheme({
                 '-webkit-appearance': 'none',
                 margin: 0,
               },
-              '& .MuiInputBase-input-MuiOutlinedInput-input':{
+              '& .MuiInputBase-input':{
                 // padding : '1rem'
   
               },
               '&[placeholder]': {
   fontSize : '14px !important',
-  fontFamily : 'Open Sans',
-              }
+  // fontFamily : 'system-ui',
+              },
+             
   
             },
+            
           },
         },
         defaultProps: {

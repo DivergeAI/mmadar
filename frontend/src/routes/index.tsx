@@ -2,12 +2,13 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Layout from "../pages/layout";
 import Workspace from "../pages/Workspace";
-import Prompts from "../pages/Workspace/Prompts";
-import Documents from "../pages/Workspace/Documents";
+import Prompts from "../pages/Workspace/Prompts/Prompts";
+import Documents from "../pages/Workspace/Documents/Documents";
 import Tools from "../pages/Workspace/Tools";
 import Functions from "../pages/Workspace/Functions";
 import Models from "../pages/Workspace/Models";
 import CreateModal from "../pages/Workspace/Models/CreateModal";
+import CreatePrompt from "../pages/Workspace/Prompts/CreatePrompt";
 
 
 export const router = createBrowserRouter([
@@ -26,7 +27,8 @@ export const router = createBrowserRouter([
                 {path : 'create', element : <CreateModal /> },
               ]
             },
-            { path: "prompts", element: <Prompts /> },
+            { path: "prompts", element: <Prompts />},
+            {path : 'prompts/create', element : <CreatePrompt /> },
             { path: "documents", element: <Documents /> },
 
             { path: "tools", element: <Tools /> },
