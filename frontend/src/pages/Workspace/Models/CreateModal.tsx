@@ -524,8 +524,23 @@ const CreateModal = () => {
             multiline
             rows={4}
             sx={{
-              resize: "vertical",
-            }}
+              '& .MuiInputBase-root': {
+                  padding: '0 !important',
+                  '& textarea': {
+                      padding: '1rem',
+                      resize: 'vertical',
+                      fontFamily: 'system-ui',
+                      fontSize: '.87rem',
+                      fontWeight: '400',
+                  }
+              },
+              '& :focus': {
+                  borderColor: 'inherit !important'
+              },
+              '& :hover': {
+                  borderColor: 'inherit !important'
+              }
+          }}
           />
         </TextFieldContainer>
 
@@ -541,8 +556,24 @@ const CreateModal = () => {
             multiline
             rows={4}
             sx={{
-              resize: "vertical",
-            }}
+              '& .MuiInputBase-root': {
+                  padding: '0 !important',
+                  '& textarea': {
+                      padding: '1rem',
+                      resize: 'vertical',
+                      fontFamily: 'system-ui',
+                      fontSize: '.87rem',
+                      fontWeight: '400',
+                      lineHeight: '1.1rem'
+                  }
+              },
+              '& :focus': {
+                  borderColor: 'inherit !important'
+              },
+              '& :hover': {
+                  borderColor: 'inherit !important'
+              }
+          }}
           />
         </TextFieldContainer>
 

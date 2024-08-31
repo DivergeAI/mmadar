@@ -10,15 +10,19 @@ pre{
     white-space: pre-wrap;
 }
 
-#chat-item .menu-icon{
+
+
+
+
+#chat-item .menu-icon {
     visibility: hidden;
-}
-
-#chat-item:hover .menu-icon,
-#chat-item.active .menu-icon {
-  visibility: visible;
-}
-
+  }
+  
+  #chat-item:hover .menu-icon,
+  #chat-item.active .menu-icon,
+  #chat-item.menu-open .menu-icon { 
+    visibility: visible;
+  }
 
 #question-div .copy-buttons{
 visibility: hidden;

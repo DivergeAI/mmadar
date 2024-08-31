@@ -62,6 +62,9 @@ const LightTheme = createTheme({
             input: {
               padding : '0.5rem 0.9rem',
               fontFamily : 'system-ui',
+              '& MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
+                minHeight : 'unset !important',
+              },
               '&[type=number]': {
                 '-moz-appearance': 'textfield',
               },
@@ -74,6 +77,7 @@ const LightTheme = createTheme({
                 margin: 0,
               },
               '& .MuiInputBase-input':{
+                
                 // padding : '1rem'
   
               },
@@ -96,6 +100,7 @@ const LightTheme = createTheme({
           },
         },
       },
+    
       MuiButton: {
         styleOverrides: {
           root: {

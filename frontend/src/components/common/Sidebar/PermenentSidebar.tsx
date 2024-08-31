@@ -11,11 +11,49 @@ import { drawerWidth } from ".";
 import Text from "../Text";
 import SearchIcon from "@mui/icons-material/Search";
 import ChatItem from "./ChatItem";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import SelectMenu from "../SelectMenu";
+import { AdminPanelSettings, ArchiveOutlined, BookmarkBorderOutlined, Code, CreateOutlined, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
 
 
 function PermenentSidebar() {
   const theme = useTheme();
+  const navigate = useNavigate()
+
+  const controls = [
+    {
+      name: "Settings",
+      icon: <SettingsOutlined />,
+      onClick: () => console.log("Settings clicked"),
+    },
+    {
+      name: "Archived Chats",
+      icon: <ArchiveOutlined />,
+      onClick : ()=>{}
+    },
+    {
+      name: "Playground",
+      icon: <Code />,
+      onClick: () => console.log("Settings clicked"),
+    },
+    {
+      name: "Admin Panel",
+      icon: <AdminPanelSettings />,
+      onClick: () => navigate('/admin'),
+      divider: true,
+    },
+    {
+      name: "Sign Out",
+      icon: <LogoutRounded />,
+      onClick: () => console.log("More clicked"),
+      divider: true,
+    },
+    {
+      name: "Active Users",
+      icon: <MoreHoriz />,
+      onClick: () => console.log("More clicked"),
+    },
+  ];
 
   return (
     <Drawer
@@ -165,7 +203,11 @@ function PermenentSidebar() {
           <Box 
           display={'flex'}
           flexDirection={'column'}
-          gap={1}>
+          gap={.5}>
+  <Text fontSize = 'small' fontWeight="500" color={theme.palette.grey[500]}>
+    Recent Chats
+    </Text>
+
   <ChatItem to="/chat/1" chatName="Chat 1" />
   <ChatItem to="/chat/2" chatName="Chat 2" />
   <ChatItem to="/chat/3" chatName="Chat 3" />
@@ -184,12 +226,16 @@ function PermenentSidebar() {
             mt: 2,
           }}
         >
-          <Box display="flex" alignItems="center" gap={2}>
-            <Avatar />
+         
+            <SelectMenu 
+            options={controls}
+            icon={ <Box display="flex" alignItems="center" gap={2}> <Avatar />
             <Text fontWeight="600" color={theme.palette.grey[800]}>
               User Name
             </Text>
-          </Box>
+          </Box>}
+          />
+           
         </Box>
       </Box>
     </Drawer>

@@ -9,6 +9,8 @@ import Functions from "../pages/Workspace/Functions";
 import Models from "../pages/Workspace/Models";
 import CreateModal from "../pages/Workspace/Models/CreateModal";
 import CreatePrompt from "../pages/Workspace/Prompts/CreatePrompt";
+import Chat from "../pages/Chat";
+import Admin from "../pages/AdminPannel";
 
 
 export const router = createBrowserRouter([
@@ -36,6 +38,15 @@ export const router = createBrowserRouter([
 
           ],
         },
+        {path : 'chat/:id', element : <Chat /> },
+        {path : 'Admin', element : <Admin /> ,children:[{
+          path : '', element : <Navigate to='admin' replace />,
+        
+        },
+      {path : 'settings', element : <div>Settings</div>}]},
+        {path : 'Admin', element : <Admin /> },
+
+
       ],
     },
   ]);

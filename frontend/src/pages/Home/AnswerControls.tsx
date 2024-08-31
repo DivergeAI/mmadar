@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import { CONTROLS } from '../../types/chat';
-import { Cached, Close, ContentPasteRounded, ModeEditOutlineOutlined, PlayCircleOutline, ThumbDownOffAlt, ThumbUpOffAlt, VolumeUpOutlined } from "@mui/icons-material";
+import { ArrowLeft, ArrowRight, Cached, Close, ContentPasteRounded, KeyboardArrowLeft, KeyboardArrowRight, ModeEditOutlineOutlined, PlayCircleOutline, ThumbDownOffAlt, ThumbUpOffAlt, VolumeUpOutlined } from "@mui/icons-material";
 import { Box, Button, Chip, Icon, IconButton, Stack, TextField, Tooltip, useTheme } from '@mui/material';
 import Text from '../../components/common/Text';
+import UniversalButton from '../../components/common/UniversalButton';
 
 function AnswerControls() {
   const theme = useTheme();
@@ -78,6 +79,25 @@ function AnswerControls() {
   return (
     <Fragment>
       <Box className='controls' display={'flex'} gap={1} mb={1} alignItems={"center"}>
+        <Stack direction={'row'} alignItems={'center'}>
+          <IconButton>
+          <Icon fontSize='small'>
+            <KeyboardArrowLeft />
+          </Icon >
+          </IconButton>
+         
+<Text fontSize='.875rem' fontWeight='600'
+sx={{
+  letterSpacing : '.1em'
+}}>
+  2/2
+</Text>
+          <IconButton>
+          <Icon fontSize='small'>
+            <KeyboardArrowRight />
+          </Icon>
+          </IconButton>
+        </Stack >
         {controls.map((control) => (
           <Tooltip title={control.title} key={control?.title}>
             <IconButton
@@ -146,19 +166,56 @@ function AnswerControls() {
               rows={2}
               maxRows={2}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  border: 'none !important'
+                marginY: '1rem',
+                '& .MuiInputBase-root': {
+                    padding: '0 !important',
+                    '& textarea': {
+                        padding: '1rem',
+                        // resize: 'vertical',
+                        fontFamily: 'system-ui',
+                        fontSize: '.87rem',
+                        fontWeight: '400',
+                    }
+                },
+                '& :focus': {
+                    borderColor: 'inherit !important'
                 },
                 '& fieldset': {
-                  border: 'none !important'
+border : 'none'
+                },
+                '& :hover': {
+                    borderColor: 'inherit !important'
                 }
-              }}
+            }}
+             
             />
           </Stack>
 
           {/* Footer */}
           <Box display={'flex'} flexDirection={'row-reverse'}>
-            <Button variant={'contained'} color={'primary'}>Submit</Button>
+          <UniversalButton
+                    label={"Save"}
+                    width={"fit-content"}
+                    // height={"fit-content"}
+                    fontSize={"medium"}
+                    textColor="common.white"
+                    sx={{
+                        m: '1rem',
+                      fontWeight: "500",
+                      backgroundColor: "success.main",
+                      border: "none ",
+                      
+                      borderRadius: ".5em",
+                      padding: "0.75rem 1rem",
+                      lineHeight: "1",
+                      "&:hover": {
+                        backgroundColor: 'success.dark',
+                      },
+                    }}
+                    // startIcon  = {<Icon>
+                    //     <ImportExport />
+                    // </Icon> }
+                  />
           </Box>
         </Box>
       )}

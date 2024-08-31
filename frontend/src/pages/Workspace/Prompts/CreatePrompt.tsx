@@ -84,12 +84,12 @@ const CreatePrompt = () => {
                             }}
                         />
                     </Stack>
-                            <Text fontSize='small' color='grey.500'>
-                            Only <b style={{
-                                color: theme.palette.grey[700]
-                            }}>alphanumeric characters and hyphens</b> are allowed - Activate this command by typing "/ "   to chat input.
+                    <Text fontSize='small' color='grey.500'>
+                        Only <b style={{
+                            color: theme.palette.grey[700]
+                        }}>alphanumeric characters and hyphens</b> are allowed - Activate this command by typing "/ "   to chat input.
 
-                            </Text>
+                    </Text>
                 </TextFieldContainer>
 
                 <TextFieldContainer label='Prompt Content' required>
@@ -101,58 +101,58 @@ const CreatePrompt = () => {
                         rows={7}
                         placeholder='Add a description for this prompt'
                         sx={{
-                            '& .MuiInputBase-root':{
+                            '& .MuiInputBase-root': {
                                 padding: '0 !important',
                                 '& textarea': {
                                     padding: '1rem',
-                                    resize : 'vertical',
-                                    fontFamily : 'system-ui',
-                                    fontSize :'.87rem',
-                                    fontWeight : '400',
+                                    resize: 'vertical',
+                                    fontFamily: 'system-ui',
+                                    fontSize: '.87rem',
+                                    fontWeight: '400',
                                 }
                             },
                             '& :focus': {
-                               borderColor: 'inherit !important'
+                                borderColor: 'inherit !important'
                             },
                             '& :hover': {
                                 borderColor: 'inherit !important'
                             }
                         }}
-/>
-<Text fontSize='small' color='grey.500'>`
-ⓘ Format your variables using square brackets like this: <b style={{
-                                color: theme.palette.grey[900]
-                            }}>[variable]</b>. Make sure to enclose them with <b style={{
-                                color: theme.palette.grey[900]
-                            }}>'['</b> and <b style={{
-                                color: theme.palette.grey[900]
-                            }}>']'</b>.
-Utilize <b style={{
-                                color: theme.palette.grey[900]
-                            }}>{"{{CLIPBOARD}}"}</b> variable to have them replaced with clipboard content.`
-                            </Text>
+                    />
+                    <Text fontSize='small' color='grey.500'>`
+                        ⓘ Format your variables using square brackets like this: <b style={{
+                            color: theme.palette.grey[900]
+                        }}>[variable]</b>. Make sure to enclose them with <b style={{
+                            color: theme.palette.grey[900]
+                        }}>'['</b> and <b style={{
+                            color: theme.palette.grey[900]
+                        }}>']'</b>.
+                        Utilize <b style={{
+                            color: theme.palette.grey[900]
+                        }}>{"{{CLIPBOARD}}"}</b> variable to have them replaced with clipboard content.`
+                    </Text>
 
                 </TextFieldContainer>
 
                 <UniversalButton
-              label={"Save & Create"}
-              width={"fit-content"}
-              height={"fit-content"}
-              fontSize={"small"}
-              textColor="common.black"
-              sx={{
-                alignSelf : 'flex-end',
-                fontWeight: "600",
-                backgroundColor: "background.paper",
-                border: "none ",
-                borderRadius: ".75rem",
-                padding: "0.5rem .75rem",
-                // lineHeight: "1",
-                "&:hover": {
-                  backgroundColor: theme.palette.grey[400],
-                },
-              }}
-            />
+                    label={"Save & Create"}
+                    width={"fit-content"}
+                    height={"fit-content"}
+                    fontSize={"small"}
+                    textColor="common.black"
+                    sx={{
+                        alignSelf: 'flex-end',
+                        fontWeight: "600",
+                        backgroundColor: "background.paper",
+                        border: "none ",
+                        borderRadius: ".75rem",
+                        padding: "0.5rem .75rem",
+                        // lineHeight: "1",
+                        "&:hover": {
+                            backgroundColor: theme.palette.grey[400],
+                        },
+                    }}
+                />
 
             </Stack>
         </Box>
