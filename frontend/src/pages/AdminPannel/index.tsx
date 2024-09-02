@@ -1,35 +1,34 @@
 import { Box, Divider, Stack, useTheme } from '@mui/material';
 import React from 'react';
 import Text from '../../components/common/Text';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import AdminDashboard from './AdminDashboard';
 
 const Admin = () => {
     const WorkspaceRoute = [
         {
-            to: '',
+            to: '/admin',
             label: 'Dashboard'
         },
         {
-            to: 'settings',
+            to: '/admin/settings',
             label: 'Settings'
         },
-       
+    ];
 
-    ]
-    const theme = useTheme()
+    const theme = useTheme();
+    const location = useLocation();
+
     return (
-        <Stack direction={'column'} spacing={1} 
-        >
+        <Stack direction={'column'} spacing={1}>
             <Box px={4} pt={3}>
                 <Text fontSize='1.24rem' fontWeight='600'>
-                    Admin Pannel
+                    Admin Panel
                 </Text>
             </Box>
 
             {/* Custom Navigation using Box */}
-            <Box
-                px={4}
-                pb={1}>
+            <Box px={4} pb={1}>
                 <Box
                     display={'flex'}
                     p={0.5}
@@ -38,9 +37,10 @@ const Admin = () => {
                     sx={{
                         backgroundColor: theme.palette.background.main,
                     }}>
-                    {WorkspaceRoute.map((route, index) => (
+                    {WorkspaceRoute.map((route) => (
                         <NavLink
-                        key={route.to}
+                            end
+                            key={route.to}
                             to={route.to}
                             style={({ isActive }) => ({
                                 textDecoration: 'none',
@@ -55,23 +55,20 @@ const Admin = () => {
                             {route.label}
                         </NavLink>
                     ))}
-
-
                 </Box>
             </Box>
 
-<Divider />
-            {/* Render nested routes here */}
-            {/* <Box 
-            display={'flex'}
-            flexDirection={'column'}
-            flex={1}
-            gap={2}
-            maxHeight={'100%'}
-            overflow={'auto'}
-            px={4} pt={1.5}>
+            <Divider />
+
+            {/* Conditionally render content only for Dashboard */}
+            {location.pathname === '/admin' && (
+                <AdminDashboard />
+            )}
+
+            {/* Outlet for rendering nested routes */}
+            <Box px={4} py={2}>
                 <Outlet />
-            </Box> */}
+            </Box>
         </Stack>
     );
 };

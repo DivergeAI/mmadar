@@ -1,4 +1,6 @@
 import { createTheme } from "@mui/material";
+import type {} from '@mui/x-data-grid/themeAugmentation';
+
 
 const LightTheme = createTheme({
     components: {
@@ -181,7 +183,15 @@ const LightTheme = createTheme({
           },
         },
       },
-      
+      MuiDataGrid :{
+        styleOverrides :{
+root:{
+  border :'none !important',
+  fontFamily : 'system-ui',
+},
+
+        }
+      }
       
       
       
