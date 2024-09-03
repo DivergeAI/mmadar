@@ -8,6 +8,7 @@ type TextFieldContainerProps = {
   width?: string | object
   direction ?: string | any
   required?: boolean
+  sx?: object
 }
 
 const TextFieldContainer = ({
@@ -15,7 +16,8 @@ const TextFieldContainer = ({
   children,
   width = { xs: '100%'},
   direction = 'ltr',
-  required = false
+  required = false,
+  sx
 }: TextFieldContainerProps) => (
   <Box
     display='flex'
@@ -24,9 +26,9 @@ const TextFieldContainer = ({
       direction
 
     }}
-    mb={{ xs: 2, sm: 0 }}
+    mb={{ xs: 2, sm: 1 }}
   >
-    <Text color='grey.800' fontSize='.87rem' fontWeight='600'>{label}{required && '*'}</Text>
+    <Text  fontSize='.87rem' fontWeight='600' sx={sx}>{label}{required && '*'}</Text>
     {children}
   </Box>
 )

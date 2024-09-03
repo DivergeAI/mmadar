@@ -20,7 +20,7 @@ const Admin = () => {
     const location = useLocation();
 
     return (
-        <Stack direction={'column'} spacing={1}>
+        <Stack direction={'column'} spacing={1} width={'100%'} height={'100vh'} >
             <Box px={4} pt={3}>
                 <Text fontSize='1.24rem' fontWeight='600'>
                     Admin Panel
@@ -66,9 +66,7 @@ const Admin = () => {
             )}
 
             {/* Outlet for rendering nested routes */}
-            <Box px={4} py={2}>
                 <Outlet />
-            </Box>
         </Stack>
     );
 };
