@@ -1,4 +1,4 @@
-import { Button, Typography, SxProps } from '@mui/material'
+import { Button, Typography, SxProps, Icon } from '@mui/material'
 import { Theme } from '@mui/system'
 import React from 'react'
 
@@ -20,7 +20,7 @@ type UniversalButtonProps = {
     | { xs?: string | number; sm?: string | number; md?: string | number }
   onClick?: () => void
   sx?: SxProps<Theme>
-
+  startIcon ?: React.ReactNode
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
   props?: any
@@ -38,12 +38,18 @@ const UniversalButton = ({
   variant = 'outlined',
   disabled,
   type = 'button',
+  startIcon,
   sx,
   ...props
 }: UniversalButtonProps) => {
   return (
     <Button
       variant={variant}
+      startIcon={<Icon fontSize='small' sx={{
+        display: 'flex',
+      }}>
+        {startIcon}
+      </Icon>}
       sx={{
         width,
         height,

@@ -15,8 +15,8 @@ const CustomSwitch = ({value,onChange}:CustomSwitchProps) => {
         onChange={onChange}
         disableRipple
         sx={{
-          width: 42,
-          height: 26,
+          width: 37,
+          height: 20,
           padding: 0,
           '& .MuiSwitch-switchBase': {
             padding: 0,
@@ -56,8 +56,8 @@ const CustomSwitch = ({value,onChange}:CustomSwitchProps) => {
           },
           '& .MuiSwitch-thumb': {
             boxSizing: 'border-box',
-            width: 22, // Make sure this width aligns with the transform above
-            height: 22,
+            width: 16, // Make sure this width aligns with the transform above
+            height: 16,
           },
           '& .MuiSwitch-track': {
             borderRadius: 26 / 2,

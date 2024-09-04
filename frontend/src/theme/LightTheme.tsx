@@ -201,8 +201,14 @@ root:{
             },
           }
         }
-      }
-      
+      },
+      MuiGrid:{
+        styleOverrides:{
+          root:{
+            width :'100% !important',
+          }
+        }
+      },
       
       
     },
