@@ -1,10 +1,9 @@
-import { Button, Typography, SxProps, Icon } from '@mui/material'
+import { Button, Icon, SxProps } from '@mui/material'
 import { Theme } from '@mui/system'
 import React from 'react'
 
 type UniversalButtonProps = {
   label: string | React.ReactNode
-  variant?: 'text' | 'outlined' | 'contained'
   width?: string | number
   height?:
     | string
@@ -23,8 +22,7 @@ type UniversalButtonProps = {
   startIcon ?: React.ReactNode
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
-  props?: any
-}
+} & React.ComponentProps<typeof Button> // Extend from MUI Button props
 
 const UniversalButton = ({
   label,
@@ -40,16 +38,16 @@ const UniversalButton = ({
   type = 'button',
   startIcon,
   sx,
-  ...props
+  ...props // Spread remaining props here
 }: UniversalButtonProps) => {
   return (
     <Button
       variant={variant}
-      startIcon={<Icon fontSize='small' sx={{
-        display: 'flex',
-      }}>
-        {startIcon}
-      </Icon>}
+      startIcon={startIcon && (
+        <Icon fontSize="small" sx={{ display: 'flex' }}>
+          {startIcon}
+        </Icon>
+      )}
       sx={{
         width,
         height,
@@ -69,22 +67,19 @@ const UniversalButton = ({
         '@media (min-width: 961px)': {
           height: typeof height === 'object' ? height.md : height,
         },
-        "&.Mui-disabled": {
-        background: `${backgroundColor} !important`,
+        '&.Mui-disabled': {
+          background: `${backgroundColor} !important`,
         },
         ...sx,
       }}
-      {...props}
+      {...props} // Pass the additional props dynamically
       onClick={onClick}
-      
       disabled={disabled}
       type={type}
     >
-   
-        {label}
+      {label}
     </Button>
   )
 }
 
 export default UniversalButton
- 

@@ -43,7 +43,7 @@ height={'100%'}
 const AdminSetting = () => {
     const [tab, setTab] = React.useState(0);
     const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
     const TABS = [
         { label: 'General', icon: <Settings /> },
@@ -69,7 +69,7 @@ const AdminSetting = () => {
             <Grid 
                 item 
                 xs={12} 
-                md={2.5} 
+                lg={2.5} 
                 sx={{
                     display: 'flex',
                     justifyContent: isSmallScreen ? 'center' : 'flex-start',
@@ -142,7 +142,7 @@ const AdminSetting = () => {
             <Grid 
                 item 
                 xs={12} 
-                md={9.5} 
+                lg={9.5} 
                 height={'100%'} 
                 sx={{ overflowY: 'auto' }}
             >

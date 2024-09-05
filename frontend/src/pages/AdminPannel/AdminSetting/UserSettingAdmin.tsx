@@ -91,13 +91,15 @@ const UserSettingAdmin = () => {
 
                                     // width: "fit-content",
                                     fontSize: ".875rem",
-                                    border: `1px solid ${theme.palette.grey[300]}`,
+                                    border: `1px solid ${theme.palette.grey[500]}`,
+                                    backgroundColor: 'grey.400',
                                     boxShadow: "none",
                                     height: "fit-content",
                                     padding: "0",
                                     '& .MuiList-root': {
                                         padding: ".2rem",
-                                    }
+                                    },
+                                   
                                 },
                             },
                             autoFocus: false,
@@ -200,7 +202,8 @@ const UserSettingAdmin = () => {
 
                                                 // width: "fit-content",
                                                 fontSize: ".875rem",
-                                                border: `1px solid ${theme.palette.grey[300]}`,
+                                                border: `1px solid ${theme.palette.grey[500]}`,
+                                                backgroundColor: 'grey.400',
                                                 boxShadow: "none",
                                                 height: "fit-content",
                                                 padding: "0",
@@ -245,7 +248,7 @@ const UserSettingAdmin = () => {
                                 >
                                     <MenuItem value="" disabled
                                         sx={{
-
+                                            // backgroundColor: 'grey.400',
                                             textTransform: "none",
                                             fontSize: ".875rem",
                                             whiteSpace: "nowrap",
@@ -257,26 +260,27 @@ const UserSettingAdmin = () => {
                                         </ListItemIcon> Select a model</MenuItem>
                                     {['mixtral:latest','list'].map((option) => (
                                         <MenuItem key={option} value={option}
-                                            sx={{
-                                                textTransform: 'none',
-                                                fontSize: ".875rem",
-                                                whiteSpace: "nowrap",
-                                                padding: ".3rem 1rem",
-                                                // borderRadius: ".5rem",
+                                        sx={{
+                                            textTransform: "capitalize",
+                                            fontSize: ".875rem",
+                                            whiteSpace: "nowrap",
+                                            padding: ".3rem 1rem",
+                                            // borderRadius: ".5rem",
+                                            '&:hover': {
+                                                borderRadius: ".5rem",
+                                                color: 'common.white',
+                                                backgroundColor: 'primary.light',
+                                            },
+                                            '&.Mui-selected': {
+                                                borderRadius: ".5rem",
+                                                backgroundColor: 'transparent',
                                                 '&:hover': {
-                                                    borderRadius: ".5rem",
                                                     color: 'common.white',
                                                     backgroundColor: 'primary.light',
-                                                },
-                                                '&.Mui-selected': {
-                                                    borderRadius: ".5rem",
-                                                    backgroundColor: 'transparent',
-                                                    '&:hover': {
-                                                        backgroundColor: 'primary.light',
-                                                    }
-                                                },
-                                            }}
-                                        >
+                                                }
+                                            },
+                                        }}
+                                    >
                                             <ListItemIcon sx={{ visibility: defaultModel === option ? 'visible' : 'hidden', minWidth: 'auto', width: '1rem', color: 'inherit' }}>
                                                 <Check fontSize="small" />
                                             </ListItemIcon>

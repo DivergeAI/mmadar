@@ -15,7 +15,7 @@ function Sidebar() {
         <Box 
         component={'nav'}
         sx={{
-            width : {sm: drawerWidth},
+            width : {md: drawerWidth},
             flexShrink: {sm: 0},
         }}
         >

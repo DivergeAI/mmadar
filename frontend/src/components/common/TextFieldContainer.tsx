@@ -21,6 +21,7 @@ const TextFieldContainer = ({
 }: TextFieldContainerProps) => (
   <Box
     display='flex'
+    marginBottom={'0 !important'}
     flexDirection='column'
     sx={{ width ,
       direction

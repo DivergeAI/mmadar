@@ -33,6 +33,7 @@ const Text = ({
         <Typography
             sx={{
                 fontWeight,
+                fontFamily: 'system-ui',
                 fontSize,
                 color: color || theme.palette.grey[800],
                 textOverflow: 'ellipsis',
