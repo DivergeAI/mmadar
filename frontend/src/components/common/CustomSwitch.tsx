@@ -3,14 +3,16 @@ import React from 'react';
 
 type CustomSwitchProps = 
 {
+  name?: string
     value?: boolean
     onChange?: (e:any) => void
 }
 
-const CustomSwitch = ({value,onChange}:CustomSwitchProps) => {
+const CustomSwitch = ({name,value,onChange}:CustomSwitchProps) => {
     const theme =useTheme()
     return (
         <Switch
+        name={name}
         checked={value}
         onChange={onChange}
         disableRipple

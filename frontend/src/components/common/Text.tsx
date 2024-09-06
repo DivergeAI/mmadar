@@ -33,13 +33,13 @@ const Text = ({
         <Typography
             sx={{
                 fontWeight,
-                fontFamily: 'system-ui',
+                fontFamily: 'system-ui !important',
                 fontSize,
                 color: color || theme.palette.grey[800],
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: lines,
-                overflow: 'hidden',
+                // overflow: 'hidden',
                 WebkitBoxOrient: 'vertical',
                 ...sx,
             }}

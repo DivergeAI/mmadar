@@ -24,8 +24,10 @@ Query: [query]`;
 
     return (
         <Stack height={'100%'} component={'form'}>
-            <Stack gap={1} flex={'1 1 auto'}>
-                <Text fontSize='.87rem' fontWeight='500'>
+<Stack gap={1} height={'100%'} flex={"1 1 auto"}
+      sx={{
+        overflowY :'auto'
+      }}>                <Text fontSize='.87rem' fontWeight='500'>
                     General Setting
                 </Text>
 
@@ -476,7 +478,7 @@ sx={{
                 fontSize={"medium"}
                 textColor="common.white"
                 sx={{
-                    // m: ' 0 1rem',
+                    m: '1rem 0 0 ',
                     alignSelf: 'flex-end',
                     fontWeight: "500",
                     backgroundColor: "success.dark",

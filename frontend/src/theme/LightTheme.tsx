@@ -60,6 +60,7 @@ const LightTheme = createTheme({
 
           '& .MuiInputBase-root': {
             fontFamily: 'system-ui',
+            lineHeight: '1.5',
           },
 
           fieldset: {

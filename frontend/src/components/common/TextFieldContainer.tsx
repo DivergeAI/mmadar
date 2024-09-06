@@ -29,7 +29,10 @@ const TextFieldContainer = ({
     }}
     mb={{ xs: 2, sm: 1 }}
   >
-    <Text  fontSize='.87rem' fontWeight='600' sx={sx}>{label}{required && '*'}</Text>
+    <Text  fontSize='.87rem' fontWeight='500' sx={{
+      mb: '.3rem',
+      ...sx
+    }}>{label}{required && '*'}</Text>
     {children}
   </Box>
 )
