@@ -30,6 +30,7 @@ import {
   TITLE_GENERATION_PROMPT,
 } from "../../../utils/data";
 import CustomSwitch from "../../../components/common/CustomSwitch";
+import { useFormik } from "formik";
 
 interface Banner {
   content: string;
@@ -38,29 +39,42 @@ interface Banner {
 }
 
 
+let initialValues= {
+  localModel : '',
+  externalModel : '',
+  titleGenerationPrompt: TITLE_GENERATION_PROMPT,
+  searchQueryGenerationPrompt: SEARCH_QUERY_GENERATION_PROMPT,
+  searchQueryGenerationPromptLengthThreshold: 100,
+}
+
 const InterfaceSettingAdmin = () => {
   const theme = useTheme()
-  const LOCAL_MODELS = ["Current Model", "mixtral:latest"];
-  const [defaultPromptSuggestions, setDefaultPromptSuggestions] =
-    React.useState<string[]>([""]);
-    const [banners, setBanners] = React.useState<Banner[]>([]);
-    
-    const addBanner = () => {
-      setBanners([...banners, { content: "", type: "", dismissible: true }]);
-    };
+  const LOCAL_MODELS = [ "mixtral:latest"];
+  const [defaultPromptSuggestions, setDefaultPromptSuggestions] = React.useState<string[]>([""]);
+  const [banners, setBanners] = React.useState<Banner[]>([]);
 
-    const updateBanner = (index: number, banner: any) => {
-      const updatedBanners = [...banners];
-      updatedBanners[index] = banner;
-      setBanners(updatedBanners);
+  const {values, handleChange,handleSubmit,setFieldValue} = useFormik({
+   initialValues,
+    onSubmit: (values) => {
+      console.log(values)
     }
+  })
 
-    const removeBanner = (index: number) => {
-      setBanners(banners.filter((_,i)=> i !== index))
-    }
-    console.log(banners)
+  const addBanner = () => {
+    setBanners([...banners, { content: "", type: "", dismissible: true }]);
+  };
+
+  const updateBanner = (index: number, banner: any) => {
+    const updatedBanners = [...banners];
+    updatedBanners[index] = banner;
+    setBanners(updatedBanners);
+  }
+
+  const removeBanner = (index: number) => {
+    setBanners(banners.filter((_, i) => i !== index))
+  }
   return (
-    <Stack height={"100%"} component={"form"} gap={1}>
+    <Stack height={"100%"} component={"form"} gap={1} onSubmit={handleSubmit}>
       <Stack
         gap={1}
         height={"100%"}
@@ -93,7 +107,14 @@ const InterfaceSettingAdmin = () => {
             sx={{ fontSize: ".75rem !important", fontWeight: "400 !important" }}
           >
             <Select
-              defaultValue={LOCAL_MODELS[0]}
+            name="localModel"
+            value={values.localModel}
+            onChange={handleChange}
+            displayEmpty
+              size="small"
+              variant="outlined"
+              IconComponent={KeyboardArrowDown}
+              renderValue={(value: string) => value || 'Current Model'}
               MenuProps={{
                 PaperProps: {
                   sx: {
@@ -118,10 +139,6 @@ const InterfaceSettingAdmin = () => {
                   horizontal: "left",
                 },
               }}
-              size="small"
-              variant="outlined"
-              IconComponent={KeyboardArrowDown}
-              renderValue={(value: string) => value}
               sx={{
                 "& .MuiSelect-select": {
                   fontSize: ".875rem",
@@ -135,12 +152,10 @@ const InterfaceSettingAdmin = () => {
                 },
               }}
             >
-              {LOCAL_MODELS?.map((option) => (
-                <MenuItem
-                  key={option}
-                  value={option}
+               <MenuItem
+                  value={''}
+                  
                   sx={{
-                    textTransform: "capitalize",
                     fontSize: ".875rem",
                     whiteSpace: "nowrap",
                     padding: ".3rem 1rem",
@@ -162,7 +177,44 @@ const InterfaceSettingAdmin = () => {
                   <ListItemIcon
                     sx={{
                       visibility:
-                        LOCAL_MODELS[0] === option ? "visible" : "hidden",
+                        values.localModel === '' ? "visible" : "hidden",
+                      minWidth: "fit-content !important",
+                      width: "1rem",
+                      color: "inherit",
+                      mr: 0.3,
+                    }}
+                  >
+                    <Check fontSize="small" />
+                  </ListItemIcon>
+                  Current Model
+                </MenuItem>
+              {LOCAL_MODELS?.map((option) => (
+                <MenuItem
+                  key={option}
+                  value={option}
+                  sx={{
+                    fontSize: ".875rem",
+                    whiteSpace: "nowrap",
+                    padding: ".3rem 1rem",
+                    "&:hover": {
+                      borderRadius: ".5rem",
+                      color: "common.white",
+                      backgroundColor: "primary.light",
+                    },
+                    "&.Mui-selected": {
+                      borderRadius: ".5rem",
+                      backgroundColor: "transparent",
+                      "&:hover": {
+                        color: "common.white",
+                        backgroundColor: "primary.light",
+                      },
+                    },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      visibility:
+                        values.localModel === option ? "visible" : "hidden",
                       minWidth: "fit-content !important",
                       width: "1rem",
                       color: "inherit",
@@ -180,8 +232,15 @@ const InterfaceSettingAdmin = () => {
             label="External Models"
             sx={{ fontSize: ".75rem !important", fontWeight: "400 !important" }}
           >
-            <Select
-              defaultValue={LOCAL_MODELS[0]}
+             <Select
+            name="externalModel"
+            value={values.externalModel}
+            onChange={handleChange}
+            displayEmpty
+              size="small"
+              variant="outlined"
+              IconComponent={KeyboardArrowDown}
+              renderValue={(value: string) => value || 'Current Model'}
               MenuProps={{
                 PaperProps: {
                   sx: {
@@ -190,7 +249,6 @@ const InterfaceSettingAdmin = () => {
                     border: `1px solid ${theme.palette.grey[500]}`,
                     backgroundColor: "grey.400",
                     boxShadow: "none",
-                    // height: "fit-content",
                     padding: "0",
                     "& .MuiList-root": {
                       padding: ".2rem",
@@ -207,13 +265,8 @@ const InterfaceSettingAdmin = () => {
                   horizontal: "left",
                 },
               }}
-              size="small"
-              variant="outlined"
-              IconComponent={KeyboardArrowDown}
-              renderValue={(value) => value}
               sx={{
                 "& .MuiSelect-select": {
-                  textTransform: "capitalize",
                   fontSize: ".875rem",
                   backgroundColor: "grey.200",
                   border: "none",
@@ -225,12 +278,10 @@ const InterfaceSettingAdmin = () => {
                 },
               }}
             >
-              {LOCAL_MODELS?.map((option) => (
-                <MenuItem
-                  key={option}
-                  value={option}
+               <MenuItem
+                  value={''}
+                  
                   sx={{
-                    textTransform: "capitalize",
                     fontSize: ".875rem",
                     whiteSpace: "nowrap",
                     padding: ".3rem 1rem",
@@ -252,7 +303,44 @@ const InterfaceSettingAdmin = () => {
                   <ListItemIcon
                     sx={{
                       visibility:
-                        LOCAL_MODELS[0] === option ? "visible" : "hidden",
+                        values.externalModel === '' ? "visible" : "hidden",
+                      minWidth: "fit-content !important",
+                      width: "1rem",
+                      color: "inherit",
+                      mr: 0.3,
+                    }}
+                  >
+                    <Check fontSize="small" />
+                  </ListItemIcon>
+                  Current Model
+                </MenuItem>
+              {LOCAL_MODELS?.map((option) => (
+                <MenuItem
+                  key={option}
+                  value={option}
+                  sx={{
+                    fontSize: ".875rem",
+                    whiteSpace: "nowrap",
+                    padding: ".3rem 1rem",
+                    "&:hover": {
+                      borderRadius: ".5rem",
+                      color: "common.white",
+                      backgroundColor: "primary.light",
+                    },
+                    "&.Mui-selected": {
+                      borderRadius: ".5rem",
+                      backgroundColor: "transparent",
+                      "&:hover": {
+                        color: "common.white",
+                        backgroundColor: "primary.light",
+                      },
+                    },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      visibility:
+                        values.localModel === option ? "visible" : "hidden",
                       minWidth: "fit-content !important",
                       width: "1rem",
                       color: "inherit",
@@ -273,11 +361,12 @@ const InterfaceSettingAdmin = () => {
         </Text>
 
         <TextField
-          value={TITLE_GENERATION_PROMPT}
+          name="titleGenerationPrompt"
+          value={values.titleGenerationPrompt}
+          onChange={handleChange}
           variant="outlined"
           multiline
           rows={5}
-          renderValue={(value: string) => value}
           sx={{
             "& .MuiInputBase-root": {
               fontSize: ".875rem",
@@ -296,11 +385,12 @@ const InterfaceSettingAdmin = () => {
         </Text>
 
         <TextField
-          value={SEARCH_QUERY_GENERATION_PROMPT}
+          name="searchQueryGenerationPrompt"
+          value={values.searchQueryGenerationPrompt}
+          onChange={handleChange}
           variant="outlined"
           multiline
           rows={5}
-          // renderValue={(value: string) => value as string}
           sx={{
             "& .MuiInputBase-root": {
               fontSize: ".875rem",
@@ -319,7 +409,9 @@ const InterfaceSettingAdmin = () => {
         </Text>
 
         <TextField
-          value={100}
+        name="searchQueryGenerationPromptLengthThreshold"
+          value={values.searchQueryGenerationPromptLengthThreshold}
+          onChange={handleChange}
           variant="outlined"
           size="small"
           sx={{
@@ -346,7 +438,7 @@ const InterfaceSettingAdmin = () => {
             Banners
           </Text>
           <IconButton
-          onClick={addBanner}
+            onClick={addBanner}
             disableRipple
             sx={{
               "&:hover": {
@@ -360,160 +452,160 @@ const InterfaceSettingAdmin = () => {
           </IconButton>
         </Stack>
 
-     {banners?.map((isBanner, index) => ( 
-       <Stack direction={"row"}>
-          <Box
-            px={1}
-            flex={"1 1 0%"}
-            border={`1px solid ${theme.palette.grey[600]}`}
-            borderRadius=".75rem"
-          >
-            <TextField
-              placeholder="Content"
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Select
-                    value={isBanner?.type}
-                    onChange={(e)=> updateBanner(index, {...isBanner , type : e.target.value})}
-                      size="small"
-                      variant="outlined"
-                      displayEmpty
-                      IconComponent={KeyboardArrowDown}
-                      renderValue={(value:string) => value || "Type"}
-                      MenuProps={{
-                        PaperProps: {
-                          sx: {
-                            width: "fit-content",
-                            fontSize: ".75rem",
-                            border: `1px solid ${theme.palette.grey[500]}`,
-                            backgroundColor: "grey.400",
-                            boxShadow: "none",
-                            // height: "fit-content",
-                            padding: "0",
-                            "& .MuiList-root": {
-                              padding: ".2rem",
+        {banners?.map((isBanner, index) => (
+          <Stack direction={"row"}>
+            <Box
+              px={1}
+              flex={"1 1 0%"}
+              border={`1px solid ${theme.palette.grey[600]}`}
+              borderRadius=".75rem"
+            >
+              <TextField
+                placeholder="Content"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Select
+                        value={isBanner?.type}
+                        onChange={(e) => updateBanner(index, { ...isBanner, type: e.target.value })}
+                        size="small"
+                        variant="outlined"
+                        displayEmpty
+                        IconComponent={KeyboardArrowDown}
+                        renderValue={(value: string) => value || "Type"}
+                        MenuProps={{
+                          PaperProps: {
+                            sx: {
+                              width: "fit-content",
+                              fontSize: ".75rem",
+                              border: `1px solid ${theme.palette.grey[500]}`,
+                              backgroundColor: "grey.400",
+                              boxShadow: "none",
+                              // height: "fit-content",
+                              padding: "0",
+                              "& .MuiList-root": {
+                                padding: ".2rem",
+                              },
                             },
                           },
-                        },
-                        autoFocus: false,
-                        anchorOrigin: {
-                          vertical: "top",
-                          horizontal: "left",
-                        },
-                        transformOrigin: {
-                          vertical: "top",
-                          horizontal: "left",
-                        },
-                      }}
-                      sx={{
-                        "& .MuiSelect-select": {
-                          padding: "0 .5rem",
-                          width: "fit-content",
-                          textTransform: "capitalize",
-                          fontSize: ".75rem",
-                          backgroundColor: "common.white",
-                          border: "none",
-                          borderRadius: ".5rem",
-                          whiteSpace: "nowrap",
-                        },
-                        "& fieldSet": {
-                          border: "none !important",
-                        },
-                      }}
-                    >
-                      <MenuItem value="" disabled
+                          autoFocus: false,
+                          anchorOrigin: {
+                            vertical: "top",
+                            horizontal: "left",
+                          },
+                          transformOrigin: {
+                            vertical: "top",
+                            horizontal: "left",
+                          },
+                        }}
                         sx={{
-                          // backgroundColor: 'grey.400',
-                          textTransform: "none",
-                          fontSize: ".75rem",
-                          whiteSpace: "nowrap",
-                          padding: ".3rem 1rem",
-
-                        }}>
-                        <ListItemIcon sx={{ visibility: isBanner.type === "" ? 'visible' : 'hidden', minWidth: 'auto !important', width: '1rem', color: 'inherit' }}>
-                          <Check fontSize="small" />
-                        </ListItemIcon>Type</MenuItem>
-                      {BANNERS_OPTIONS?.map((option) => (
-                        <MenuItem
-                          key={option}
-                          value={option}
-                          sx={{
+                          "& .MuiSelect-select": {
+                            padding: "0 .5rem",
+                            width: "fit-content",
                             textTransform: "capitalize",
+                            fontSize: ".75rem",
+                            backgroundColor: "common.white",
+                            border: "none",
+                            borderRadius: ".5rem",
+                            whiteSpace: "nowrap",
+                          },
+                          "& fieldSet": {
+                            border: "none !important",
+                          },
+                        }}
+                      >
+                        <MenuItem value="" disabled
+                          sx={{
+                            // backgroundColor: 'grey.400',
+                            textTransform: "none",
                             fontSize: ".75rem",
                             whiteSpace: "nowrap",
                             padding: ".3rem 1rem",
-                            "&:hover": {
-                              borderRadius: ".5rem",
-                              color: "common.white",
-                              backgroundColor: "primary.light",
-                            },
-                            "&.Mui-selected": {
-                              borderRadius: ".5rem",
-                              backgroundColor: "transparent",
+
+                          }}>
+                          <ListItemIcon sx={{ visibility: isBanner.type === "" ? 'visible' : 'hidden', minWidth: 'auto !important', width: '1rem', color: 'inherit' }}>
+                            <Check fontSize="small" />
+                          </ListItemIcon>Type</MenuItem>
+                        {BANNERS_OPTIONS?.map((option) => (
+                          <MenuItem
+                            key={option}
+                            value={option}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontSize: ".75rem",
+                              whiteSpace: "nowrap",
+                              padding: ".3rem 1rem",
                               "&:hover": {
+                                borderRadius: ".5rem",
                                 color: "common.white",
                                 backgroundColor: "primary.light",
                               },
-                            },
-                          }}
-                        >
-                          <ListItemIcon
-                            sx={{
-                              visibility:
-                                isBanner.type === option
-                                  ? "visible"
-                                  : "hidden",
-                              minWidth: "fit-content !important",
-                              width: "1rem",
-                              color: "inherit",
-                              mr: 0.3,
+                              "&.Mui-selected": {
+                                borderRadius: ".5rem",
+                                backgroundColor: "transparent",
+                                "&:hover": {
+                                  color: "common.white",
+                                  backgroundColor: "primary.light",
+                                },
+                              },
                             }}
                           >
-                            <Check fontSize="small" />
-                          </ListItemIcon>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Tooltip title="Dismissable" placement="top">
-                      <Box>
-                        <CustomSwitch value={isBanner?.dismissible}  onChange={()=> updateBanner(index, {...isBanner , dismissible : !isBanner.dismissible})}/>
-                      </Box>
-                    </Tooltip>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                "& .MuiInputBase-root": {
-                  padding: "0",
-                  fontSize: ".75rem",
-                  borderRadius: ".75rem",
-                  backgroundColor: "transparent",
-                  "& fieldSet": {
-                    border: "none",
+                            <ListItemIcon
+                              sx={{
+                                visibility:
+                                  isBanner.type === option
+                                    ? "visible"
+                                    : "hidden",
+                                minWidth: "fit-content !important",
+                                width: "1rem",
+                                color: "inherit",
+                                mr: 0.3,
+                              }}
+                            >
+                              <Check fontSize="small" />
+                            </ListItemIcon>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Dismissable" placement="top">
+                        <Box>
+                          <CustomSwitch value={isBanner?.dismissible} onChange={() => updateBanner(index, { ...isBanner, dismissible: !isBanner.dismissible })} />
+                        </Box>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    padding: "0",
+                    fontSize: ".75rem",
+                    borderRadius: ".75rem",
+                    backgroundColor: "transparent",
+                    "& fieldSet": {
+                      border: "none",
+                    },
+                    "&:placeholder": {
+                      fontSize: ".75rem !important",
+                      color: theme.palette.grey[600],
+                    },
                   },
-                  "&:placeholder": {
-                    fontSize: ".75rem !important",
-                    color: theme.palette.grey[600],
-                  },
-                },
-              }}
-            />
-          </Box>
-          {/* remove Banner Button */}
-          <IconButton disableRipple onClick={()=>removeBanner(index)}>
-            <Icon fontSize="small">
-              <Clear />
-            </Icon>
-          </IconButton>
-        </Stack> )
-        )} 
+                }}
+              />
+            </Box>
+            {/* remove Banner Button */}
+            <IconButton disableRipple onClick={() => removeBanner(index)}>
+              <Icon fontSize="small">
+                <Clear />
+              </Icon>
+            </IconButton>
+          </Stack>)
+        )}
 
         {/* Default Prompt Suggestion */}
 
@@ -629,6 +721,7 @@ const InterfaceSettingAdmin = () => {
 
       {/* bottom Save Button */}
       <UniversalButton
+      type='submit'
         label={"Save"}
         width={"fit-content"}
         fontSize={"medium"}

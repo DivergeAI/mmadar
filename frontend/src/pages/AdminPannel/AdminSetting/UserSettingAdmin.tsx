@@ -23,8 +23,6 @@ const initialValues:UserSettingAdminProps= {
 
 const UserSettingAdmin = () => {
     const theme = useTheme();
-    const [isAllowChatDeletion, setIsAllowChatDeletion] = React.useState<boolean>(false);
-
 
     const {handleChange,values, handleSubmit, setFieldValue} = useFormik({
         initialValues,

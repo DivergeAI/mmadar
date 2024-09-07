@@ -9,20 +9,36 @@ import {
 } from "@mui/material";
 import React from "react";
 import UniversalButton from "../../../components/common/UniversalButton";
-import { Check, KeyboardArrowDown } from "@mui/icons-material";
+import { Check, KeyboardArrowDown, Language } from "@mui/icons-material";
 import Text from "../../../components/common/Text";
 import CustomSwitch from "../../../components/common/CustomSwitch";
 import TextFieldContainer from "../../../components/common/TextFieldContainer";
+import { useFormik } from "formik";
+
+const initialValues ={
+  language: 'en',
+  webSearchEnabled: false,
+  searchResultCount: 3,
+  concurrentRequests: 10,
+  bypassSSL: false,
+}
 
 const WebSearchSetting = () => {
   const theme = useTheme();
-  const [webSearchEnabled, setWebSearchEnabled] = React.useState(false);
+
+const {values,handleChange ,setFieldValue, handleSubmit} = useFormik({
+    initialValues,
+    onSubmit: (values) => {
+      console.log(values)
+    }
+})
+
   return (
-    <Stack height={"100%"} component={"form"}>
-     <Stack gap={1} height={'100%'} flex={"1 1 auto"}
-      sx={{
-        overflowY :'auto'
-      }}>
+    <Stack height={"100%"} component={"form"} onSubmit={handleSubmit}>
+      <Stack gap={1} height={'100%'} flex={"1 1 auto"}
+        sx={{
+          overflowY: 'auto'
+        }}>
         <Text fontSize=".87rem" fontWeight="500">
           Web Search
         </Text>
@@ -35,7 +51,7 @@ const WebSearchSetting = () => {
           <Text fontSize=".75rem" fontWeight="500">
             Enable Web Search
           </Text>
-          <CustomSwitch value={webSearchEnabled} onChange={() => setWebSearchEnabled(!webSearchEnabled)} />
+          <CustomSwitch name="webSearchEnabled" value={values.webSearchEnabled} onChange={handleChange} />
         </Stack>
         <Stack
           direction={"row"}
@@ -132,53 +148,57 @@ const WebSearchSetting = () => {
             ))}
           </Select>
         </Stack>
-{webSearchEnabled ? 
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          gap={1}
-        >
+        {values.webSearchEnabled ?
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            gap={1}
+          >
             <TextFieldContainer label="Search Result Count" >
-            <TextField
-                value={'3'}
-                variant="outlined" 
+              <TextField
+              name='searchResultCount'
+                value={values.searchResultCount}
+                onChange={handleChange}
+                variant="outlined"
                 fullWidth
                 size="small"
                 sx={{
-                    '& .MuiInputBase-root': {
-                        fontSize :'.87rem',
-                        backgroundColor : 'grey.200'  ,
-                        borderRadius : '.5rem',
-                        '& fieldSet':{
-                            border : 'none'
-                        }  
+                  '& .MuiInputBase-root': {
+                    fontSize: '.87rem',
+                    backgroundColor: 'grey.200',
+                    borderRadius: '.5rem',
+                    '& fieldSet': {
+                      border: 'none'
                     }
+                  }
                 }}
-                />
+              />
             </TextFieldContainer>
             <TextFieldContainer label="Concurrent Requests" >
-            <TextField
-                value={'10'}
-                variant="outlined" 
+              <TextField
+              name='concurrentRequests'
+                value={values.concurrentRequests}
+                onChange={handleChange}
+                variant="outlined"
                 fullWidth
                 size="small"
                 sx={{
-                    '& .MuiInputBase-root': {
-                        fontSize :'.87rem',
-                        backgroundColor : 'grey.200'  ,
-                        borderRadius : '.5rem',
-                        '& fieldSet':{
-                            border : 'none'
-                        }  
+                  '& .MuiInputBase-root': {
+                    fontSize: '.87rem',
+                    backgroundColor: 'grey.200',
+                    borderRadius: '.5rem',
+                    '& fieldSet': {
+                      border: 'none'
                     }
+                  }
                 }}
-                />
+              />
             </TextFieldContainer>
-            </Stack> : null}
+          </Stack> : null}
         <Divider />
         <Text fontSize=".87rem" fontWeight="500">
-        Web Loader Settings
+          Web Loader Settings
         </Text>
 
         <Stack
@@ -187,10 +207,11 @@ const WebSearchSetting = () => {
           alignItems={"center"}
         >
           <Text fontSize=".75rem" fontWeight="500">
-          Bypass SSL verification for Websites
-</Text>
+            Bypass SSL verification for Websites
+          </Text>
           <UniversalButton
-            label="On"
+            label={values.bypassSSL ? 'On' : 'Off'}
+            onClick={() => setFieldValue('bypassSSL', !values.bypassSSL)}
             variant="outlined"
             border="none"
             width="fit-content"
@@ -207,43 +228,46 @@ const WebSearchSetting = () => {
               },
             }}
             disableRipple={true} // This prop will be automatically passed
-            />
+          />
         </Stack>
 
         <Text fontSize=".75rem" fontWeight="500">
-        Youtube Loader Settings
+          Youtube Loader Settings
         </Text>
         <Stack
           direction={"row"}
           alignItems={"center"}
           gap={2}
-          >
-            <Text fontSize=".75rem" fontWeight="500" sx={{
-                minWidth: "fit-content !important",
-            }}>
-                Language
-                </Text>
-                <TextField
-                value={'en'}
-                variant="outlined" 
-                fullWidth
-                size="small"
-                sx={{
-                    '& .MuiInputBase-root': {
-                        fontSize :'.87rem',
-                        backgroundColor : 'grey.200'  ,
-                        borderRadius : '.5rem',
-                        '& fieldSet':{
-                            border : 'none'
-                        }  
-                    }
-                }}
-                />
-          </Stack>
+        >
+          <Text fontSize=".75rem" fontWeight="500" sx={{
+            minWidth: "fit-content !important",
+          }}>
+            Language
+          </Text>
+          <TextField
+          name ='language'
+            value={values.language}
+            onChange={handleChange}
+            variant="outlined"
+            fullWidth
+            size="small"
+            sx={{
+              '& .MuiInputBase-root': {
+                fontSize: '.87rem',
+                backgroundColor: 'grey.200',
+                borderRadius: '.5rem',
+                '& fieldSet': {
+                  border: 'none'
+                }
+              }
+            }}
+          />
+        </Stack>
       </Stack>
 
       {/* bottom Save Button */}
       <UniversalButton
+      type='submit'
         label={"Save"}
         width={"fit-content"}
         fontSize={"medium"}

@@ -5,10 +5,28 @@ import { Check, KeyboardArrowDown, Visibility } from '@mui/icons-material';
 import TextFieldContainer from '../../../components/common/TextFieldContainer';
 import { SPEACH_TO_TEXT_ENGINE, TEXT_TO_SPEACH_ENGINE } from '../../../utils/data';
 import React from 'react';
+import { useFormik } from 'formik';
+
+const initialValues ={
+  openAIBaseURL: 'https://api.openai.com/v1',
+  openAIKey: '',
+  sttEngine: SPEACH_TO_TEXT_ENGINE[0],
+  sstModel :'whisper-1',
+  ttsEngine: TEXT_TO_SPEACH_ENGINE[0],
+  ttsVoice: 'Default'
+}
 
 const AudioSettingAdmin = () => {
   const theme = useTheme();
  const [sttEngine ,setSttEngine] = React.useState(SPEACH_TO_TEXT_ENGINE[0])
+
+
+ const {values,handleChange, setFieldValue, handleSubmit} = useFormik({
+    initialValues,
+    onSubmit: (values) => {
+      console.log(values)
+    }
+ })
 
   return (
     <Stack height={"100%"} component={"form"}>
@@ -29,8 +47,13 @@ const AudioSettingAdmin = () => {
             Speech-to-Text Engine
           </Text>
           <Select
-          value={sttEngine}
-          onChange={(e) => setSttEngine(e.target.value)}
+          name='sttEngine'
+          value={values.sttEngine}
+          onChange={handleChange}
+            size="small"
+            variant="outlined"
+            IconComponent={KeyboardArrowDown}
+            renderValue={(value) => value}
             MenuProps={{
               PaperProps: {
                 sx: {
@@ -56,10 +79,6 @@ const AudioSettingAdmin = () => {
                 horizontal: "left",
               },
             }}
-            size="small"
-            variant="outlined"
-            IconComponent={KeyboardArrowDown}
-            renderValue={(value) => value}
             sx={{
               "& .MuiSelect-select": {
                 padding: "0 .5rem",
@@ -117,10 +136,12 @@ const AudioSettingAdmin = () => {
           </Select>
         </Stack>
 
-{sttEngine === 'OpenAI' ? 
+{values.sttEngine === 'OpenAI' ? 
 (<Stack direction='row' gap={1}>
   <TextField 
-  value={'https://api.openai.com/v1'} //API Base URL
+  name='openAIBaseURL'
+  value={values.openAIBaseURL} //API Base URL
+  onChange={handleChange}
   placeholder='API Base URL'
   variant='outlined'
   size='small'
@@ -137,7 +158,9 @@ const AudioSettingAdmin = () => {
   }}
   />
   <TextField 
-  value={''} //API Key
+  name='openAIKey'
+  value={values.openAIKey} //API Key
+  onChange={handleChange}
   placeholder='API Key'
   variant='outlined'
   size='small'
@@ -171,8 +194,8 @@ const AudioSettingAdmin = () => {
  : null}
 
 
-
-{sttEngine === 'OpenAI'&& 
+{/* sst Model */}
+{values.sttEngine === 'OpenAI'&& 
 <>
 <Divider />
 <Text fontSize=".875rem" fontWeight="500">
@@ -180,7 +203,9 @@ const AudioSettingAdmin = () => {
  </Text>
  
  <TextField 
-  value={'whisper-1'} //API Base URL
+ name='sstModel'
+  value={values.sstModel}
+  onChange={handleChange} //API Base URL
   placeholder='API Base URL'
   variant='outlined'
   size='small'
@@ -196,6 +221,7 @@ const AudioSettingAdmin = () => {
     }
   }}
   /></>}
+
         <Divider />
         <Text fontSize=".875rem" fontWeight="500">
             TTS Settings
@@ -212,7 +238,9 @@ const AudioSettingAdmin = () => {
            </Text>
        
           <Select
-            defaultValue={TEXT_TO_SPEACH_ENGINE[0]}
+          name='ttsEngine'
+          value={values.ttsEngine}
+          onChange={handleChange}
             MenuProps={{
               PaperProps: {
                 sx: {
@@ -302,6 +330,9 @@ const AudioSettingAdmin = () => {
 {/* TTS VOICE */}
         <TextFieldContainer label='TTS Voice'>
           <Select
+          name='ttsVoice'
+          value={values.ttsVoice}
+          onChange={handleChange}
             defaultValue={'Default'}
             MenuProps={{
               PaperProps: {

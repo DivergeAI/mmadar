@@ -21,6 +21,17 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import UniversalButton from "../../../components/common/UniversalButton";
+import { useFormik } from "formik";
+
+const initialValues={
+  imageEngine: IMAGE_GENERATION_ENGINE[0],
+  ImageGenerationExperimental : 'On',
+   automatic1111BaseURL: '',
+  automatic1111ApiAuthString: '',
+  comfyUIBaseURL: '',
+  openAIAPIBaseURL: 'https://api.openai.com/v1',
+  openAIAPIKey: ''
+}
 
 const ImagesSettingAdmin = () => {
   const theme = useTheme();
@@ -28,8 +39,15 @@ const ImagesSettingAdmin = () => {
     IMAGE_GENERATION_ENGINE[0]
   );
 
+  const {values,handleChange,setFieldValue,handleSubmit} =useFormik({
+    initialValues,
+    onSubmit: (values) => {
+      console.log(values);
+    }
+  })
+
   return (
-    <Stack height={"100%"} component={"form"}>
+    <Stack height={"100%"} component={"form"} onSubmit={handleSubmit}>
       <Stack
         gap={1}
         height={"100%"}
@@ -58,8 +76,9 @@ const ImagesSettingAdmin = () => {
             Image Generation Engine
           </Text>
           <Select
-            value={imageEngine}
-            onChange={(e) => setImageEngine(e.target.value)}
+name="imageEngine"
+            value={values.imageEngine}
+            onChange={handleChange}
             MenuProps={{
               PaperProps: {
                 sx: {
@@ -131,7 +150,7 @@ const ImagesSettingAdmin = () => {
               >
                 <ListItemIcon
                   sx={{
-                    visibility: imageEngine === option ? "visible" : "hidden",
+                    visibility: values.imageEngine === option ? "visible" : "hidden",
                     minWidth: "fit-content !important",
                     width: "1rem",
                     color: "inherit",
@@ -155,7 +174,7 @@ const ImagesSettingAdmin = () => {
             Image Generation (Experimental)
           </Text>
           <UniversalButton
-            label="On"
+            label={values?.ImageGenerationExperimental ? 'On' : 'Off'}
             variant="outlined"
             border="none"
             width="fit-content"
@@ -186,6 +205,9 @@ const ImagesSettingAdmin = () => {
 
             <Stack direction="row" gap={1} alignItems={"center"}>
               <TextField
+              name="automatic1111BaseURL"
+              value={values.automatic1111BaseURL}
+              onChange={handleChange}
                 variant="outlined"
                 size="small"
                 placeholder="Enter URL (e.g. http://127.0.0.1:7860/)"
@@ -227,6 +249,9 @@ const ImagesSettingAdmin = () => {
             </Text>
 
             <TextField
+            name="automatic1111ApiAuthString"
+            value={values.automatic1111ApiAuthString}
+            onChange={handleChange}
               variant="outlined"
               size="small"
               placeholder="Enter api auth string (e.g. username:password)"
@@ -271,6 +296,9 @@ const ImagesSettingAdmin = () => {
 
             <Stack direction="row" gap={1} alignItems={"center"}>
               <TextField
+              name="comfyUIBaseURL"
+              value={values.comfyUIBaseURL}
+              onChange={handleChange}
                 variant="outlined"
                 size="small"
                 placeholder="Enter URL (e.g. http://127.0.0.1:7860/)"
@@ -304,7 +332,9 @@ const ImagesSettingAdmin = () => {
             // OpenAI (DALL-E)
             <Stack direction='row' gap={1}>
             <TextField 
-            value={'https://api.openai.com/v1'} //API Base URL
+            name="openAIAPIBaseURL"
+            value={values.openAIAPIBaseURL} //API Key
+            onChange={handleChange}
             placeholder='API Base URL'
             variant='outlined'
             size='small'
@@ -321,7 +351,9 @@ const ImagesSettingAdmin = () => {
             }}
             />
             <TextField 
-            value={''} //API Key
+            name="openAIAPIKey"
+            value={values.openAIAPIKey} //API Key
+            onChange={handleChange}
             placeholder='API Key'
             variant='outlined'
             size='small'
@@ -357,6 +389,7 @@ const ImagesSettingAdmin = () => {
 
       {/* bottom Save Button */}
       <UniversalButton
+      type='submit'
         label={"Save"}
         width={"fit-content"}
         fontSize={"medium"}

@@ -14,17 +14,20 @@ import ChatItem from "./ChatItem";
 import { NavLink, useNavigate } from "react-router-dom";
 import SelectMenu from "../SelectMenu";
 import { AdminPanelSettings, ArchiveOutlined, BookmarkBorderOutlined, Code, CreateOutlined, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import SettingsModal from "../../Settings";
 
 
 function PermenentSidebar() {
   const theme = useTheme();
   const navigate = useNavigate()
+  const [openSetting,setOpenSetting] =useState(false)
 
   const controls = [
     {
       name: "Settings",
       icon: <SettingsOutlined />,
-      onClick: () => console.log("Settings clicked"),
+      onClick: () =>setOpenSetting(true), 
     },
     {
       name: "Archived Chats",
@@ -238,6 +241,10 @@ function PermenentSidebar() {
            
         </Box>
       </Box>
+      <SettingsModal 
+      open ={openSetting}
+      onClose={()=>setOpenSetting(false)}
+      />
     </Drawer>
   );
 }
