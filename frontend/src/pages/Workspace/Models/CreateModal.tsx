@@ -1,10 +1,7 @@
 import {
   Box,
-  Menu,
   Stack,
   TextField,
-  MenuItem,
-  TextareaAutosize,
   Divider,
   InputAdornment,
   IconButton,
@@ -12,19 +9,27 @@ import {
   useTheme,
   Checkbox,
   FormControlLabel,
-  Chip,
-  Slider,
-  Switch,
 } from "@mui/material";
-import React, { Fragment, useState } from "react";
+import  {  useState } from "react";
 import UniversalButton from "../../../components/common/UniversalButton";
 import TextFieldContainer from "../../../components/common/TextFieldContainer";
 import Text from "../../../components/common/Text";
-import { Add, Check, Close, Key } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import TransparentSlider from "../../../components/Workspace/TransparentSlider";
-import CustomSwitch from "../../../components/common/CustomSwitch";
 import AddTags from "../../../components/common/AddTags";
+import { AdvanceModel } from "../../../types/createModel";
+import AdvancePrompt, { renderPromptChildren } from "../../../components/Workspace/AdvancePrompt";
+
+
+type PromptConfig = {
+  label: string;
+  keyName: string;
+  type: 'text' | 'slider' | 'switch'; // define types of input controls
+  sliderProps?: any; // any additional props for sliders
+  textProps?: any;   // any additional props for text fields
+  switchProps?: any; // any additional props for switches
+};
+
 
 const CreateModal = () => {
   const theme = useTheme();
@@ -34,30 +39,7 @@ const CreateModal = () => {
   const [promptSuggestion, setPromptSuggestion] = useState<string[]>([""]);
   const [tags, setTags] = useState<string[]>([]);
   const [isJSONPreview, setIsJSONPreview] = useState<boolean>(false);
-  const [advancedPromptValues, setAdvancedPromptValues] = useState<{
-    seed: number;
-    stopSequence: string;
-    temperature: number;
-    mirostat: number;
-    mirostatEta: number;
-    mirostatTau: number;
-    topK: number;
-    topP: number;
-    minP: number;
-    frequencyPenalty: number;
-    repeatLastN: number;
-    tfsZ: number;
-    contextLength: number;
-    batchSize: number;
-    tokenToKeep: number;
-    maxTokens: number;
-    useMmap: boolean;
-    useMlock: boolean;
-    useThread: boolean;
-    customStates: {
-      [key: string]: boolean;
-    };
-  }>(
+  const [advancedPromptValues, setAdvancedPromptValues] = useState<AdvanceModel>(
     {
       seed: 0,
       stopSequence: "",
@@ -118,49 +100,8 @@ const CreateModal = () => {
     setPromptSuggestion(newSuggestions);
   };
 
-  const AdvanceParamWrapper = ({ label, keyName, children }: { label: string, keyName: string, children: React.ReactNode }) => {
-    const isCustom = advancedPromptValues.customStates[keyName];
-
-    return (
-      <Fragment>
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize=".75rem" fontWeight="400" sx={{ lineHeight: "1rem" }}>
-            {label}
-          </Text>
-          <UniversalButton
-            label={isCustom ? "Custom" : "Default"}
-            onClick={() =>
-              handleAdvancedPromptChange(
-                keyName,
-                advancedPromptValues[keyName],
-                !isCustom
-              )
-            }
-            sx={{
-              padding: "0",
-              minWidth: "auto",
-              height: "auto",
-              fontSize: ".75rem",
-              fontWeight: "400",
-              lineHeight: "1rem",
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              color: "grey.800",
-              border: "none",
-            }}
-          />
-        </Stack>
-
-        {isCustom && <Box>{children}</Box>}
-      </Fragment>
-    );
-  };
   const handleAdvancedPromptChange = (
-    key: string,
+    key: number | string,
     value: any,
     isCustom?: boolean
   ) => {
@@ -174,284 +115,27 @@ const CreateModal = () => {
     }));
   };
 
-  const ADVANCE_PROMPT_VIEW = [
-    {
-      label: "Seed",
-      keyName: "seed",
-      children: (
-        <TextField
-          value={advancedPromptValues.seed}
-          onChange={(e) => handleAdvancedPromptChange("seed", e.target.value)}
-          type="number"
-          variant="outlined"
-          size="small"
-          fullWidth
-          sx={{
-            "& fieldset": {
-              border: "none !important",
-            },
-          }}
-        />
-      ),
-    },
-    {
-      label: "Stop Sequence",
-      keyName: "stopSequence",
-      children: (
-        <TextField
-          value={advancedPromptValues.stopSequence}
-          onChange={(e) =>
-            handleAdvancedPromptChange("stopSequence", e.target.value)
-          }
-          variant="outlined"
-          placeholder="Enter stop sequence"
-          size="small"
-          fullWidth
-          sx={{
-            "& fieldset": {
-              border: "none !important",
-            },
-          }}
-        />
-      ),
-    },
-    {
-      label: "Temperature",
-      keyName: "temperature",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.temperature}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("temperature", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Mirostat",
-      keyName: "mirostat",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.mirostat}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("mirostat", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Mirostat Eta",
-      keyName: "mirostatEta",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.mirostatEta}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("mirostatEta", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Mirostat Tau",
-      keyName: "mirostatTau",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.mirostatTau}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("mirostatTau", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Top K",
-      keyName: "topK",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.topK}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("topK", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Top P",
-      keyName: "topP",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.topP}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("topP", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Min P",
-      keyName: "minP",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.minP}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("minP", value)
-          }
-        />
-      ),
-    },
-
-    {
-      label: "Frequency Penalty",
-      keyName: "frequencyPenalty",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.frequencyPenalty}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("frequencyPenalty", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Repeat Last N",
-      keyName: "repeatLastN",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.repeatLastN}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("repeatLastN", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Tfs Z",
-      keyName: "tfsZ",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.tfsZ}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("tfsZ", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Context Length",
-      keyName: "contextLength",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.contextLength}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("contextLength", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Batch Size (num_batch)",
-      keyName: "batchSize",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.batchSize}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("batchSize", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Token To Keep On Context Refresh (num_keep)",
-      keyName: "tokenToKeep",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.tokenToKeep}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("tokenToKeep", value)
-          }
-        />
-      ),
-    },
-    {
-      label: "Max Tokens (num_predict)",
-      keyName: "maxTokens",
-      children: (
-        <TransparentSlider
-          value={advancedPromptValues.maxTokens}
-          onChange={(e: Event, value: number | number[]) =>
-            handleAdvancedPromptChange("maxTokens", value)
-          }
-        />
-      ),
-    },
-
-    {
-      label: "use_mmap (Ollama)",
-      keyName: "useMmap",
-      children: (
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize=".75rem" fontWeight="500" color="grey.700">
-            {advancedPromptValues?.useMmap ? "Enabled" : "Disabled"}
-          </Text>
-
-          <CustomSwitch
-            value={advancedPromptValues?.useMmap}
-            onChange={(e) =>
-              handleAdvancedPromptChange("useMmap", e.target.checked)
-            }
-          />
-        </Stack>
-      ),
-    },
-    {
-      label: "use_mlock (Ollama)",
-      keyName: "useMlock",
-      children: (
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize=".75rem" fontWeight="500" color="grey.700">
-            {advancedPromptValues?.useMlock ? "Enabled" : "Disabled"}
-          </Text>
-
-          <CustomSwitch
-            value={advancedPromptValues?.useMlock}
-            onChange={(e) =>
-              handleAdvancedPromptChange("useMlock", e.target.checked)
-            }
-          />
-        </Stack>
-      ),
-    },
-    {
-      label: "use_thread (Ollama)",
-      keyName: "useThread",
-      children: (
-        <Stack
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize=".75rem" fontWeight="500" color="grey.700">
-            {advancedPromptValues?.useThread ? "Enabled" : "Disabled"}
-          </Text>
-
-          <CustomSwitch
-            value={advancedPromptValues?.useThread}
-            onChange={(e) =>
-              handleAdvancedPromptChange("useThread", e.target.checked)
-            }
-          />
-        </Stack>
-      ),
-    },
-  ];
+  const ADVANCE_PROMPT_VIEW: PromptConfig[] = [
+    { label: "Seed", keyName: "seed", type: "text", textProps: { type: "number" } },
+    { label: "Stop Sequence", keyName: "stopSequence", type: "text", textProps: { placeholder: "Enter stop sequence" } },
+    { label: "Temperature", keyName: "temperature", type: "slider" },
+    { label: "Mirostat", keyName: "mirostat", type: "slider" },
+    { label: "Mirostat Eta",keyName: "mirostatTau", type: "slider" },
+    { label: "Mirostat Tau",keyName: "mirostatEta", type: "slider" },
+    { label: "Top K",keyName: "topK", type: "slider" },
+    { label: "Top p",keyName: "topP", type: "slider" },
+    { label: "Min p",keyName: "minP", type: "slider" },
+    { label: "Frequency Penalty", keyName: "frequencyPenalty",type: "slider" },
+    { label: "Repeat Last N", keyName: "repeatLastN",type: "slider" },
+    { label: "Tfs Z", keyName: "tfsZ",type: "slider" },
+    { label: "Context Length", keyName: "contextLength",type: "slider" },
+    { label: "Batch Size (num_batch)", keyName: "batchSize",type: "slider" },
+    { label: "Token To Keep On Context Refresh (num_keep)", keyName: "tokenToKeep",type: "slider" },
+    { label: "Max Tokens (num_predict)", keyName: "maxTokens",type: "slider" },
+    { label: "use_mmap (Ollama)", keyName: "useMmap", type: "switch" },
+    { label: "use_mlock (Ollama)", keyName: "useMlock", type: "switch" },
+    { label: "num_thread (Ollama)", keyName: "useMlock", type: "slider" },
+  ]  
 
   return (
     <Box>
@@ -605,8 +289,8 @@ const CreateModal = () => {
         </Stack>
 
         {isAdvancePrompt && (
-          <Stack direction={"column"} gap={1.5}>
-            {ADVANCE_PROMPT_VIEW.map((param, index) => (
+          <Stack direction={"column"} gap={1.2}>
+            {/* {ADVANCE_PROMPT_VIEW.map((param, index) => (
               <AdvanceParamWrapper
                 key={index}
                 label={param.label}
@@ -614,7 +298,20 @@ const CreateModal = () => {
               >
                 {param.children}
               </AdvanceParamWrapper>
-            ))}
+            ))} */}
+                  {ADVANCE_PROMPT_VIEW.map(({ label, keyName, type, ...props }) => (
+        <AdvancePrompt
+          key={keyName}
+          label={label}
+          keyName={keyName}
+          value={advancedPromptValues[keyName]}
+          isCustom={advancedPromptValues.customStates[keyName]}
+          onChange={handleAdvancedPromptChange}
+        >
+          {renderPromptChildren(type, advancedPromptValues[keyName], keyName, handleAdvancedPromptChange, props)}
+        </AdvancePrompt>
+      ))}
+
           </Stack>
         )}
         <Divider />

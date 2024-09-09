@@ -1,8 +1,14 @@
 import { Dialog, DialogContent, DialogTitle, Grid, Icon, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
 import Text from "../common/Text";
-import { Group, Settings } from "@mui/icons-material";
+import { Chat, Group, Person, Settings, VolumeDown } from "@mui/icons-material";
 import { useState } from "react";
 import GeneralSetting from "./GeneralSetting";
+import InterfaceSetting from "./InterfaceSetting";
+import PersonalizationSetting from "./PersonalizationSetting";
+import AudioSetting from "./AudioSetting";
+import ChatSetting from "./ChatHistorySetting";
+import AccountSetting from "./AccountSetting";
+
 
 const SettingsModal = ({open, onClose}:any) => {
     const theme = useTheme();
@@ -11,7 +17,11 @@ const SettingsModal = ({open, onClose}:any) => {
 
     const TABS = [
         { label: 'General', icon: <Settings /> },
-        { label: 'Users', icon: <Group /> },
+        { label: 'Interface', icon: <Group /> },
+        { label: 'Personaization', icon:<Person /> },
+        { label: 'Audio', icon: <VolumeDown />},
+        { label: 'Chat', icon:<ChatSetting /> },
+        { label: 'Account', icon: '' },
        
     ];
 
@@ -24,7 +34,7 @@ const SettingsModal = ({open, onClose}:any) => {
             sx:{
                 margin : '1rem',
                 maxWidth :'48rem !important',
-                maxHeight :'60% !important',
+                maxHeight :'50% !important',
                 width: '100% !important',
                 height: '100%',
                 backgroundColor: theme.palette.grey[200],
@@ -130,6 +140,11 @@ const SettingsModal = ({open, onClose}:any) => {
             >
 
               {tab === 0 && <GeneralSetting />}
+              {tab === 1 && <InterfaceSetting/>}
+                {tab === 2 && <PersonalizationSetting />}
+                {tab === 3 && <AudioSetting />}
+                {tab === 4 && <ChatSetting  />}
+                {tab === 5 && <AccountSetting   />}
                                 
                         </Grid>
 

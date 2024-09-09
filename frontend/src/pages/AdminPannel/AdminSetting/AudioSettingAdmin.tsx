@@ -33,7 +33,8 @@ const AudioSettingAdmin = () => {
       <Stack gap={1} height={'100%'} flex={"1 1 auto"}
         sx={{
           overflowY: 'auto'
-        }}>        <Text fontSize=".87rem" fontWeight="500">
+        }}>        
+        <Text fontSize=".87rem" fontWeight="500">
           STT Settings
         </Text>
 

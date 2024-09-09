@@ -1,5 +1,4 @@
-import { Box, Slider, Stack, TextField, useTheme } from '@mui/material';
-import React from 'react';
+import { Box, Slider, Stack, useTheme } from '@mui/material';
 import MuiInput from '@mui/material/Input';
 
 type TransparentSliderProps = {
@@ -25,20 +24,16 @@ const TransparentSlider = ({value , onChange}: TransparentSliderProps  ) => {
                     width: '1rem',
                     height: '1rem',
                     backgroundColor: 'primary.main',
-                    // '&:hover': {
-                    //     boxShadow: '0px 0px 0px 8px rgba(0, 0, 0, 0.16)',
-                    // }
+                    '&:hover': {
+                        boxShadow: 'none',
+                    }
                 },
-                // '& .MuiSlider-track': {
-                //     border : 'none !important',
-                //     height: '4px',
-                //     borderRadius: '8px',
-                //     // background : 'transparent !important',
-                // },
+                
                 '& .MuiSlider-rail': {
-                    height: '4px',
+                    height: '.5rem',
+                    // padding: '0px  !important',
                     borderRadius: '8px',
-                    // background : 'transparent !important',
+                    backgroundColor : 'common.white',
                 }
             }}/>
   <MuiInput

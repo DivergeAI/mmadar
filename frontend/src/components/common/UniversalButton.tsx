@@ -54,6 +54,7 @@ const UniversalButton = ({
         fontSize,
         color: textColor,
         border,
+        fontFamily: 'system-ui',
         borderRadius: '8px',
         fontWeight: '600',
         backgroundColor: disabled ? 'inherit' : backgroundColor,
