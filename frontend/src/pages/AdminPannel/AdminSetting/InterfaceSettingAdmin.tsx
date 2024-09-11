@@ -28,7 +28,7 @@ import {
   BANNERS_OPTIONS,
   SEARCH_QUERY_GENERATION_PROMPT,
   TITLE_GENERATION_PROMPT,
-} from "../../../utils/data";
+} from "../../../utils/constants";
 import CustomSwitch from "../../../components/common/CustomSwitch";
 import { useFormik } from "formik";
 

@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { Fragment } from "react";
-import { IMAGE_GENERATION_ENGINE } from "../../../utils/data";
+import { IMAGE_GENERATION_ENGINE } from "../../../utils/constants";
 import Text from "../../../components/common/Text";
 import {
   Check,

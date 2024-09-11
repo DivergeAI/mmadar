@@ -1,5 +1,5 @@
 import { Assignment, Cloud, Group, Image, Language, Monitor, Settings, Storage, VolumeUp } from '@mui/icons-material';
-import { Box, Grid, Icon, Tab, Tabs, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Icon, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import GeneralSettings from './GeneralSettingsAdmin';
 import UserSetting from './UserSettingAdmin';

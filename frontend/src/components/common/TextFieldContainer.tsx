@@ -31,6 +31,7 @@ const TextFieldContainer = ({
   >
     <Text  fontSize='.87rem' fontWeight='500' sx={{
       mb: '.3rem',
+      fontFamily :'system-ui !important',
       ...sx
     }}>{label}{required && '*'}</Text>
     {children}

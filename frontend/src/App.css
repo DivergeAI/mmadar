@@ -22,6 +22,9 @@ pre{
   #chat-item.active .menu-icon,
   #chat-item.menu-open .menu-icon { 
     visibility: visible;
+    background: 'linear-gradient(to left, transparent 80%, gray)';
+    background-color: 'grey';
+    flex-shrink: 0,
   }
 
 #question-div .copy-buttons{

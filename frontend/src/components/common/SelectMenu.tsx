@@ -3,11 +3,9 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MoreHoriz } from '@mui/icons-material';
-import { Box, Divider, ListItemIcon, ListSubheader, useTheme } from '@mui/material';
+import { Box, Divider, ListItemIcon, ListSubheader, TextField, useTheme } from '@mui/material';
 import Text from './Text';
 import AddTags from './AddTags';
-
-const ITEM_HEIGHT = 48;
 
 interface MenuOption {
   name: string;
@@ -33,19 +31,19 @@ export default function SelectMenu({
   menuStyle,
   tag= false,
 }: SelectMenuProps) {
+
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [inputValue, setInputValue] = React.useState('');
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    // Add a class to ensure visibility of the menu icon when the menu is open
     event.currentTarget.closest('#chat-item')?.classList.add('menu-open');
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    // Remove the class when the menu is closed
     document.querySelector('#chat-item.menu-open')?.classList.remove('menu-open');
   };
 
@@ -65,8 +63,6 @@ export default function SelectMenu({
         sx={{
           padding: '0 !important',
           backgroundColor: 'transparent !important',
-          // width: '24px',
-          // height: '24px',
         }}
       >
         {icon}
@@ -84,8 +80,12 @@ export default function SelectMenu({
         slotProps={{
           paper: {
             sx: {
-              // maxHeight: ITEM_HEIGHT * 4.5,
+              '& .MuiList-root': {
+                padding: '0 !important',
+              },
+              padding: '0.25rem !important',
               width: '20ch',
+              borderRadius:'.75rem',
               border: `1px solid ${theme.palette.grey[300]}`,
               backgroundColor: theme.palette.background.default,
               ...menuStyle,
@@ -94,27 +94,48 @@ export default function SelectMenu({
         }}
       >
         {options.map((option) => (
-          <>
-            <MenuItem key={option.name} onClick={() => handleOptionClick(option)}>
+          <React.Fragment key={option.name}>
+            <MenuItem onClick={() => handleOptionClick(option)}
+            sx={{
+              padding:'.5rem .75rem !important',
+              gap : '.5rem',
+              borderRadius:'.5rem',
+            }}>
               {option?.icon && (
                 <ListItemIcon
                   sx={{
                     color: theme.palette.grey[800],
                     width: '16px',
                     height: '16px',
+                    minWidth : 'fit-content !important',
                   }}
                 >
                   {option.icon}
                 </ListItemIcon>
               )}
-              <Text>{option.name}</Text>
+              <Text fontSize='.875rem' fontWeight='500'>{option.name}</Text>
             </MenuItem>
             {option?.divider && <Divider />}
-            {option?.tag && <ListSubheader >
-              <AddTags label={false} tags={[]} /></ListSubheader>}
-          </>
+          </React.Fragment>
         ))}
+
+        {/* Add input field after the divider */}
+        
+ <Box m={1}>
+
+  <AddTags label={false} tags={[]} />
+ </Box>
+
+
       </Menu>
     </div>
   );
 }
+
+
+
+// option?.tag && (
+//   <ListSubheader key={option.name + '-tags'}>
+//   <AddTags label={false} tags={[]} />
+// </ListSubheader>
+// )

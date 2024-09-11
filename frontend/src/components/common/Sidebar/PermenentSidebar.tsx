@@ -16,13 +16,29 @@ import SelectMenu from "../SelectMenu";
 import { AdminPanelSettings, ArchiveOutlined, BookmarkBorderOutlined, Code, CreateOutlined, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import SettingsModal from "../../Settings";
+import { getChatList, getChatListByTagName } from "../../../api/chats";
+import { useQuery } from "@tanstack/react-query";
 
 
 function PermenentSidebar() {
+  let token:string|undefined = localStorage.getItem('token') ?? undefined;
   const theme = useTheme();
   const navigate = useNavigate()
   const [openSetting,setOpenSetting] =useState(false)
 
+const {data:AllChats} = useQuery({
+  queryKey :[ 'chatList'],
+  queryFn : ()=> getChatList(token),
+  retry : 1
+})
+
+const {data : AllPinnedTags} = useQuery({
+  queryKey :[ 'tags', 'pinned'],
+  queryFn : ()=> getChatListByTagName(token,'pinned'),
+  retry : 1
+})
+
+console.log(AllPinnedTags)
   const controls = [
     {
       name: "Settings",
@@ -194,27 +210,52 @@ function PermenentSidebar() {
         {/* Chats - Scrollable Area */}
         <Box
           sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
             width: "100%",
             flexGrow: 1,
             overflowY: "auto",
-            p: 1,
+            // p: .5,
           }}
         >
-          {/* {Array.from({ length: 15 }).map((_, index) => (
-            <ChatItem key={index} />
-          ))} */}
+
+          {/* Pinned */}
+
+{AllPinnedTags?.length> 0 &&
           <Box 
           display={'flex'}
           flexDirection={'column'}
-          gap={.5}>
-  <Text fontSize = 'small' fontWeight="500" color={theme.palette.grey[500]}>
-    Recent Chats
-    </Text>
+          gap={'.2rem'}>
+  <Text fontSize = '.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{my :1}}>
+Pinned    </Text>
 
-  <ChatItem to="/chat/1" chatName="Chat 1" />
-  <ChatItem to="/chat/2" chatName="Chat 2" />
-  <ChatItem to="/chat/3" chatName="Chat 3" />
+          { AllPinnedTags.map((chat:any,index : number)=>(
+
+      <ChatItem key={chat.id} data = {chat} index={index}/>
+
+    ))}
 </Box>
+}
+         <Box display={'flex'}
+          flexDirection={'column'}
+          gap={'.2rem'}>
+
+          {AllChats?.length> 0 && AllChats.map((chat:any,index : number)=>(
+          <Box 
+          key={chat.id}
+          >
+  { chat?.time_range !== AllChats[index-1]?.time_range && 
+  <Text fontSize = '.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{my :1}}>
+    {chat?.time_range}
+    </Text>
+}
+
+      <ChatItem  data = {chat} />
+
+</Box>
+    ))}
+         </Box>
         </Box>
 
         {/* Bottom - User Avatar and Menu */}

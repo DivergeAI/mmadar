@@ -1,4 +1,3 @@
-import React from 'react';
 import UniversalButton from '../common/UniversalButton';
 import Text from '../common/Text';
 import { Stack, useTheme } from '@mui/material';
