@@ -16,12 +16,13 @@ import SelectMenu from "../SelectMenu";
 import { AdminPanelSettings, ArchiveOutlined, BookmarkBorderOutlined, Code, CreateOutlined, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import SettingsModal from "../../Settings";
-import { getChatList, getChatListByTagName } from "../../../api/chats";
-import { useQuery } from "@tanstack/react-query";
+import { getAllChatTags, getChatList, getChatListByTagName } from "../../../api/chats";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import UniversalButton from "../UniversalButton";
 
 
 function PermenentSidebar() {
-  let token:string|undefined = localStorage.getItem('token') ?? undefined;
+  let token:string = localStorage.getItem('token');
   const theme = useTheme();
   const navigate = useNavigate()
   const [openSetting,setOpenSetting] =useState(false)
@@ -33,12 +34,18 @@ const {data:AllChats} = useQuery({
 })
 
 const {data : AllPinnedTags} = useQuery({
-  queryKey :[ 'tags', 'pinned'],
+  queryKey :[ 'pinnedTags'],
   queryFn : ()=> getChatListByTagName(token,'pinned'),
   retry : 1
 })
 
-console.log(AllPinnedTags)
+const {data: AllTags} = useQuery({
+  queryKey :[ 'tags'],
+  queryFn : ()=> getAllChatTags(token),
+  retry : 1
+})
+console.log("All Chat tags",AllTags)
+
   const controls = [
     {
       name: "Settings",
@@ -219,6 +226,34 @@ console.log(AllPinnedTags)
             // p: .5,
           }}
         >
+          <Box>
+         {AllTags?.length > 0 &&  <UniversalButton 
+label = {'all'}
+backgroundColor="transparent"
+border="none"
+textColor="grey.800"
+fontSize={'.75rem'}
+sx={{
+  minWidth : 'fit-content',
+  lineHeight : '1rem',
+  padding :'0 .5rem'
+}}
+/>}
+            {AllTags?.length> 0 && AllTags.map((tag:any,index : number)=>(
+<UniversalButton 
+label = {tag.name !== 'pinned' && tag.name }
+backgroundColor="transparent"
+border="none"
+textColor="grey.800"
+fontSize={'.75rem'}
+sx={{
+  minWidth : 'fit-content',
+  lineHeight : '1rem',
+  padding :'0 .5rem'
+}}
+/>
+            ))}
+          </Box>
 
           {/* Pinned */}
 

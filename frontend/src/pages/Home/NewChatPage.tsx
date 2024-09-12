@@ -1,16 +1,24 @@
-import { Box, Fade, Grow, Icon, Stack, useTheme } from "@mui/material";
+import { Box, Button, Fade, Grow, Icon, Stack, useTheme } from "@mui/material";
 import Text from "../../components/common/Text";
 import { ArrowUpward } from "@mui/icons-material";
+import Image  from    "../../assets/favicon.png"
 
 
+type NewChatPageProps = {
+  title : string[]
+  content : string
+}
 
+type Props ={
+  promptSuggestions : NewChatPageProps[]
+}
 
-const NewChatPage = () => {
+const NewChatPage = ({promptSuggestions} : Props) => {
   const theme = useTheme();
   return (
 
     <Stack direction={'column'} height={"100%"} gap={2} textAlign={'start'} justifyContent={'center'}>
-      <img src="../../assets/favicon.png" alt="logo" />
+      <img src={Image} alt="logo" width={'44px'} height={'44px'}/>
       <Grow in={true} timeout={1000}
         style={{ transformOrigin: '0 0 0' }}
       >
@@ -44,19 +52,29 @@ const NewChatPage = () => {
             overflow={'auto'}
             gap={2}
           >
-            {[...Array(10)].map((_, index) => (
+            {promptSuggestions?.map((prompt:NewChatPageProps, index:number) => (
               <Stack
+              component={Button}
                 key={index}
                 p={2.3}
                 bgcolor={theme.palette.grey[200]}
                 borderRadius={"1.5rem"}
                 minWidth={"16rem"}
                 height={"9rem"}
+                flexDirection={"column"}
+                alignItems={"flex-start"}
+                textAlign={"start"}
+                textTransform={"none"}
+                justifyContent={"space-between"}
                 gap={2}
+                disableRipple
                 sx={{
                   "&:hover": {
                     cursor: "pointer",
                     backgroundColor: theme.palette.grey[600],
+                    '.arrow-up' :{
+                      color: theme.palette.grey[900]
+                    }
                   },
                 }}
               >
@@ -66,17 +84,16 @@ const NewChatPage = () => {
                     fontWeight="600"
                     color={theme.palette.grey[900]}
                   >
-                    How to create a new chat?
+                   {prompt.title[0]}
                   </Text>
 
                   <Text
                     fontSize="14px"
                     fontWeight="400"
-                    color={theme.palette.grey[500]}
+                    color={theme.palette.grey[900]}
                     lines={2}
                   >
-                    Explain options trading in simple terms if I'm familiar with
-                    buying and selling stocks.
+                   {prompt.title[1]}
                   </Text>
                 </div>
 
@@ -84,6 +101,7 @@ const NewChatPage = () => {
                   direction={"row"}
                   justifyContent={"space-between"}
                   alignItems={"center"}
+                  width={"100%"}
                 >
                   <Text
                     fontSize="14px"
@@ -92,8 +110,9 @@ const NewChatPage = () => {
                   >
                     Prompt{" "}
                   </Text>
-                  <Icon fontSize="small">
+                  <Icon fontSize="small" >
                     <ArrowUpward
+                    className="arrow-up"
                       sx={{
                         color: theme.palette.grey[500],
                         "&:hover": {

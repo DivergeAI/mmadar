@@ -5,9 +5,26 @@ import ChatSection from './ChatSection';
 import SearchSection from './SearchSection';
 import HeaderSection from './HeaderSection';
 import NewChatPage from './NewChatPage';
+import { useQuery } from '@tanstack/react-query';
+import { getBackendConfig, getModels } from '../../api';
 
 function Home() {
     const theme = useTheme();
+    const token:string = localStorage.getItem('token') || '';
+
+    const {data:AllModelList} = useQuery({
+        queryKey : ['modelList'],
+        queryFn : () => getModels(token),
+    })
+
+
+const {data:ApiConfigData} = useQuery({
+    queryKey : ['config'],
+    queryFn :  getBackendConfig,
+})
+
+console.log("Api Config Data",ApiConfigData)
+
     return (
         <Box
             display={'flex'}
@@ -18,7 +35,7 @@ function Home() {
             boxSizing={'border-box'}
             gap={4}
         >
-           <HeaderSection />
+           <HeaderSection models={AllModelList}/>
 
         {/* Main Section */}
 
@@ -34,7 +51,7 @@ function Home() {
             >
                 {/* <ChatSection /> */}
                 
-                <NewChatPage />
+                <NewChatPage promptSuggestions = {ApiConfigData?.default_prompt_suggestions}/>
                
             </Box>
 

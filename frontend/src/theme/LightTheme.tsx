@@ -175,6 +175,8 @@ const LightTheme = createTheme({
           color: '#FFFFFF',
           borderRadius: '8px',
           fontSize: '12px',
+          fontWeight :'500',
+          fontFamily: 'system-ui',
         },
       },
     },

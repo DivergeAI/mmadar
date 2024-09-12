@@ -27,8 +27,9 @@ const ChatItem = ({ data ,index}: any) => {
     const [chatTitle, setChatTitle] = useState(data?.title);
     const [pinned, setPinned] = useState(false);
 const [open, setOpen] = useState(false);
+const [tags, setTags] = useState<any>([]);
 
-    const token:string  = localStorage.getItem('token');
+    const token:string  = localStorage.getItem('token') || '';
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChatTitle(e.target.value);
@@ -46,8 +47,10 @@ const [open, setOpen] = useState(false);
       onSuccess: (data) => {
           const isPinned = data.some((tag: any) => tag.name === 'pinned');
           setPinned(isPinned); // Update the pinned state
+          setTags(data?.filter((tag: any) => tag.name !== 'pinned'));
       },
   });
+
 
 const hanldeDeleteTagPinned = () => {
   let id = data?.id
@@ -58,7 +61,7 @@ const {mutate:DeletePinnedTagMutation} = useMutation({
   mutationFn :deleteTagById,
   onSuccess : () => {
     queryClient.invalidateQueries({
-      queryKey : ['tags']
+      queryKey : ['pinnedTags']
     })
   }
 })
@@ -67,7 +70,7 @@ const {mutate:AddPinnedTagMutation} = useMutation({
   mutationFn :addTagById,
   onSuccess : () => {
     queryClient.invalidateQueries({
-      queryKey : ['tags']
+      queryKey : ['pinnedTags']
     })
   }
 })
@@ -290,7 +293,7 @@ const{mutate : ChangeChatTitleMutation} =useMutation({
             // Prevent the icon from shrinking
           }}
         >
-          <SelectMenu options={options}  />
+          <SelectMenu options={options} tags ={tags} />
         </Box>
         {/* </Tooltip> */}
       </Box>
@@ -301,18 +304,58 @@ const{mutate : ChangeChatTitleMutation} =useMutation({
         <Dialog
         open={open}
         onClose={() => setOpen(false)}
+        sx={{
+          '& .MuiDialog-paper': {
+            borderRadius: '12px',
+            width: '32rem',
+          },
+        }}
         >
-          <DialogTitle>Delete Chat?</DialogTitle>
+          <DialogTitle sx={{
+            padding : '1rem 1.5rem 0.5rem 1.5rem',
+            fontSize : '1.125rem',
+            fontWeight : '600',
+          }}>Delete Chat?</DialogTitle>
           <DialogContent>
 
-            <Text>
-              This will delete {data?.title}.
+            <Text fontSize=".87rem" fontWeight="400" color="grey.500">
+              This will delete <span style={{fontWeight : '600', fontSize : 'inherit', fontFamily : 'inherit'}}>
+              {data?.title}.
+                </span>
             </Text>
           </DialogContent>
-          <DialogActions>
+          <DialogActions sx={
+            {
+              padding : '0 2rem 2rem 2rem',
+            }
+          }>
+          <UniversalButton 
+            label='Cancel'
+            border="none"
+            backgroundColor="grey.400"
+            textColor="grey.800"
+            onClick={() => setOpen(false)}
+            sx={{
+              py : '0.5rem',
+              width : '100%',
+              '&:hover': {
+                backgroundColor: 'grey.400',
+              }
+            }}
+            />
             <UniversalButton 
             label='Confirm'
+            border="none"
+            backgroundColor="common.black"
+            textColor="common.white"
             onClick={() => DeleteChatMutation({token, id : data.id})}
+            sx={{
+              py : '0.5rem',
+              width : '100%',
+              '&:hover': {
+                backgroundColor: 'common.black',
+              }
+            }}
             />
             </DialogActions>
         </Dialog>

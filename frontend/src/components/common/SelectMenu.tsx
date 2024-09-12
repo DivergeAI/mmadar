@@ -13,13 +13,14 @@ interface MenuOption {
   icon?: React.ReactNode;
   divider?: boolean;
   tag?: boolean;
+
 }
 
 interface SelectMenuProps {
   options: MenuOption[];
   icon?: React.ReactNode;
   menuStyle?: React.CSSProperties;
-  tag?: boolean;
+  tags?: any[];
 }
 
 export default function SelectMenu({
@@ -29,7 +30,7 @@ export default function SelectMenu({
     height : '24px'
   }} />,
   menuStyle,
-  tag= false,
+  tags,
 }: SelectMenuProps) {
 
   const theme = useTheme();
@@ -94,7 +95,7 @@ export default function SelectMenu({
         }}
       >
         {options.map((option) => (
-          <React.Fragment key={option.name}>
+         [
             <MenuItem onClick={() => handleOptionClick(option)}
             sx={{
               padding:'.5rem .75rem !important',
@@ -114,16 +115,28 @@ export default function SelectMenu({
                 </ListItemIcon>
               )}
               <Text fontSize='.875rem' fontWeight='500'>{option.name}</Text>
-            </MenuItem>
-            {option?.divider && <Divider />}
-          </React.Fragment>
+            </MenuItem>,
+           option?.divider &&   <Divider />
+            ]
         ))}
 
         {/* Add input field after the divider */}
         
  <Box m={1}>
 
-  <AddTags label={false} tags={[]} />
+  <AddTags label={false} tags={tags} sx={{
+    backgroundColor : 'transparent !important',
+    border : `1px solid ${theme.palette.grey[300]}`,
+    height : '0',
+    '& .MuiChip-label':{
+      '-webkit-line-clamp': 1,
+      overFlow : 'hidden',
+      fontSize : '.7rem !important',
+      fontWeight : '500 !important',
+      fontFamily : 'system-ui !important',
+      color : 'commom.black',
+    }
+  }}/>
  </Box>
 
 

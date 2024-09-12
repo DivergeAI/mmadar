@@ -343,3 +343,36 @@ export const deleteChatById = async (paylaod:{token: string, id: string}) => {
 
 	return res;
 };
+
+// get All Chat tags of user
+export const getAllChatTags = async (token: string = '') => {
+	let error = null;
+
+	const res = await fetch(`${API_BASE_URL}/chats/tags/all`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420',
+			...(token && { authorization: `Bearer ${token}` })
+		}
+	})
+		.then(async (res) => {
+			if (!res.ok) throw await res.json();
+			return res.json();
+		})
+		.then((json) => {
+			return json;
+		})
+		.catch((err) => {
+			error = err;
+			console.log(err);
+			return null;
+		});
+
+	if (error) {
+		throw error;
+	}
+
+	return res;
+};

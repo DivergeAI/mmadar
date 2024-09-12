@@ -2,6 +2,7 @@ import {
   Add,
   AdminPanelSettings,
   ArchiveOutlined,
+  Check,
   Close,
   Code,
   Download,
@@ -27,13 +28,15 @@ import {
   Stack,
   TextField,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import { Fragment, useMemo, useState } from "react";
 import SelectMenu from "../../components/common/SelectMenu";
 import Text from "../../components/common/Text";
 import ArchivedChatDialog from "./ArchivedChatDialog";
 import UniversalButton from "../../components/common/UniversalButton";
-
+import image from '../../assets/logo192.png';
+import { NavLink } from "react-router-dom";
 const shareOptions = [
   {
     name: "Share",
@@ -47,17 +50,22 @@ const shareOptions = [
   },
 ];
 
-const containsText = (text: string, searchText: string) =>
+const containsText = (text: string, searchText: string) =>{
+  if (searchText === '') {
+    return true;
+  }
   text.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+}
 
 const allOptions = ["maxtrial:latest"];
 
-const HeaderSection = () => {
+const HeaderSection = ({models}:any) => {
+  const theme = useTheme();
   const [isArchivedChats, setIsArchivedChats] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState("");
   const [createModels, setCreateModels] = useState<string[]>([""]);
-
+console.log("AllModelList",models)
   const handleAddModels = () => {
     setCreateModels([...createModels, ""]);
   };
@@ -67,9 +75,10 @@ const HeaderSection = () => {
   };
 
   const displayedOptions = useMemo(
-    () => allOptions.filter((option) => containsText(option, searchText)),
+    () => models?.filter((option) => containsText(option?.name, searchText)),
     [searchText]
   );
+
 
   const controls = [
     {
@@ -114,14 +123,21 @@ const HeaderSection = () => {
             <Stack direction={'row'} gap={0} alignItems={'center'} key={index}>
               <FormControl fullWidth>
                 <Select
+value={selectedOption}
+onChange={(e) => setSelectedOption(e.target.value)}  // Ensure this is working
+onClose={() => setSearchText("")}
                   MenuProps={{
                     PaperProps: {
                       sx: {
                         width: "30rem",
-                        border: `1px solid #E0E0E0`,
+                        border: `1px solid ${theme.palette.grey[300]}`,
                         boxShadow: "none",
                         height: "fit-content",
                         padding: "0",
+                        backgroundColor: "common.white",
+                        '& .MuiList-root': {
+                          padding: '0 !important',
+                        }
                       },
                     },
                     autoFocus: false,
@@ -136,10 +152,8 @@ const HeaderSection = () => {
                   }}
                   labelId="search-select-label"
                   id="search-select"
-                  value={selectedOption}
                   label="Options"
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                  onClose={() => setSearchText("")}
+                  
                   renderValue={(value) => (
                     <Text fontSize="1.125rem" fontWeight="600">
                       {value || "Select a Model"}
@@ -172,15 +186,15 @@ const HeaderSection = () => {
                   }}
                 >
                   <ListSubheader 
+                  // disableGutters
                   sx={{
-                    '& .MuiListSubheader-root': {
-                      lineHeight: '0 !important',
-                    }
+                    backgroundColor: theme.palette.common.white,
+                    lineHeight: "0",
                   }}>
                     <TextField
                       size="small"
                       autoFocus
-                      placeholder="Type to search..."
+                      placeholder="Search a model"
                       fullWidth
                       variant="outlined"
                       InputProps={{
@@ -201,8 +215,8 @@ const HeaderSection = () => {
                       }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
-                          padding: "0",
-                          // backgroundColor: "common.white",
+                          padding: ".3rem",
+                          backgroundColor: "common.white",
                           // height: "40px",
                           // paddingRight: "32px",
                         },
@@ -213,45 +227,109 @@ const HeaderSection = () => {
                     />
                   </ListSubheader>
                   <Divider />
-                  {displayedOptions.length === 0 ? (
-                    <MenuItem disabled>No options available</MenuItem>
+                  {displayedOptions?.length === 0 ? (
+                    <Box 
+                    boxSizing={'border-box'}
+                    width={"100%"}
+                    >
+                      <Text sx={{
+                                            margin : ".7rem 1.5rem"
+
+                      }}>
+                        No result found
+                      </Text>
+                      <Box
+                      
+                      component={NavLink}
+                      to={'#'}
+                      sx={{
+                        display :'block',
+                        margin : " 0.7rem 1rem",
+                        padding : ".5rem .5rem .75rem",
+                        color: theme.palette.grey[800],
+                        fontSize: '.875rem',
+                        lineHeight: '1.25rem',
+                        fontWeight: '500',
+                        fontFamily: 'system-ui',
+                        textDecoration: 'none',
+                        ':hover': {
+                          borderRadius: '.5rem',
+                          color: theme.palette.grey[800],
+                          backgroundColor: "grey.400",
+                        }
+                      }}
+                      >
+                       Pull "{searchText}" from the Ollama.com
+                      </Box>
+                    </Box>
                   ) : (
-                    displayedOptions.map((option, i) => (
+                    (displayedOptions || models)?.map((option : any, i) => (
                       <MenuItem
-                        key={i}
-                        value={option}
+                        key={option?.id}
+                        value={option.name}
                         sx={{
-                          margin: "0.2rem 1rem",
+                          margin: "0.5rem .75rem .375rem",
                           borderRadius: ".5rem",
                           "&:hover": {
                             backgroundColor: "grey.400",
                           },
                           "&.Mui-selected": {
-                            backgroundColor: "grey.500",
+                            fontWeight: "500",
+                            fontSize: ".875rem",
+                            lineHeight: "1.25rem",
+                            backgroundColor: "grey.400",
                             ":hover": {
-                              backgroundColor: "grey.400",
+                              backgroundColor: "transparent",
                             },
                           },
                         }}
                       >
                         <Stack
                           direction={"row"}
-                          alignItems={"baseline"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                          width={"100%"}
                           sx={{
                             fontSize: ".875rem",
                           }}
                         >
-                          <Icon
-                            fontSize="small"
-                            sx={{
-                              marginRight: "8px",
-                            }}
-                          >
-                            <Close />
+                         <Stack direction={'row'} alignItems={'end'}>
+  <Avatar
+    src={image}
+    sx={{
+      width: "1.25rem",
+      height: "1.25rem",
+      marginRight: "8px",
+    }}
+  />
+  <Text fontSize=".875rem" fontWeight="600">
+    {option?.name}
+  </Text>
+  {/* Wrap Tooltip around a Box or native element */}
+  <Tooltip title={`${option?.ollama?.details?.quantization_level} (${(option.ollama?.size / 1024 ** 3).toFixed(1)}GB)`} placement="top"
+  sx={{
+    '& .MuiTooltip-tooltip':{
+      fontSize: '.875rem !important',
+      fontWeight: '500',
+    }
+  }}>
+      <Text fontSize=".75rem" fontWeight="500" color="grey.900" sx={{ml:'2px'}}>
+        {option?.owned_by === 'ollama' ? option?.ollama.details.parameter_size : ''}
+      </Text>
+  </Tooltip>
+</Stack>
+
+                         {selectedOption === option.name && (
+                          <Icon sx={{
+                            color: theme.palette.grey[800],
+                            width: '1rem',
+                            height: '1rem',
+                          }}>
+                            <Check/>
                           </Icon>
-                          <Text fontSize="small" fontWeight="600">
-                            {option}
-                          </Text>
+                         )}
+                        
+
                         </Stack>
                       </MenuItem>
                     ))

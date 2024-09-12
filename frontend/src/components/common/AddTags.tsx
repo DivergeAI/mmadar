@@ -1,9 +1,9 @@
 import { Box, Chip, Icon, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
-import React from 'react';
+import React, { memo } from 'react';
 import Text from './Text';
 import { Add, Check, Close } from '@mui/icons-material';
 
-const AddTags = ({ tags, setTags, label = true }: any) => {
+const AddTags = ({ tags, setTags, label = true , sx}: any) => {
   const [isAddTag, setIsAddTag] = React.useState(false);
   const [tag, setTag] = React.useState("");
   return (
@@ -12,18 +12,19 @@ const AddTags = ({ tags, setTags, label = true }: any) => {
         Tags
       </Text>}
 
-      <Stack direction={"row"} alignItems={"center"} gap={1} mt={1}>
+      <Stack direction={"row"} alignItems={"center"} gap={1} mt={1} flexWrap={'wrap'}>
         {tags?.map((tag: any, index: any) => (
           <Chip
+          clickable={false}
             size="small"
-            label={tag}
-            key={index}
+            label={tag?.name}
+            key={tag?.id}
             deleteIcon={
               <Close
                 sx={{
-                  width: "0.8rem",
-                  height: "0.8rem",
-                  color: "grey.800",
+                  width: "0.7rem",
+                  height: "0.7rem",
+                  stroke: "grey.800 !important",
                   cursor: "pointer",
                   "&:hover": {
                     color: "grey.800",
@@ -32,8 +33,17 @@ const AddTags = ({ tags, setTags, label = true }: any) => {
               />
             }
             onDelete={() => {
-              const newTags = tags.filter((_: any, i: any) => i !== index);
+              const newTags = tags?.filter((_: any, i: any) => i !== index);
               setTags(newTags);
+            }}
+            sx={{
+              fontFamily: "system-ui",
+              overflow: "hidden",
+              '-webkit-line-clamp': 1,
+              '& .MuiChip-deleteIcon': {
+                color: "common.black",
+              },
+              ...sx,
             }}
           />
         ))}
@@ -53,6 +63,7 @@ const AddTags = ({ tags, setTags, label = true }: any) => {
           <Icon fontSize="small">
             <Add
               sx={{
+               
                 rotate: isAddTag ? "45deg" : "",
                 transition: "all 0.3s",
                 width: "1rem",
