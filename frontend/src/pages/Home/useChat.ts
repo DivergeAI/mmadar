@@ -61,6 +61,7 @@ const useChat = (initialChatId= '') => {
         }
     }, [history]);
 
+    
 
     const { data: SingleChatData } = useQuery({
         queryKey: ['chat', initialChatId],
@@ -91,7 +92,16 @@ const useChat = (initialChatId= '') => {
     });
 
 
+useEffect(() => {
+    if (SingleChatData) {
+        setChatId(SingleChatData.id);
+        setMessages(SingleChatData.chat.messages);
+        setHistory(SingleChatData.chat.history);
+        setSelectedModels(SingleChatData.chat.models);
+    }
+}, [SingleChatData]);
 
+console.log("chat id in use chat",chatId);
 
     // handle submit function
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -107,6 +117,7 @@ const useChat = (initialChatId= '') => {
             messages.length !== 0 &&
             messages[messages.length - 1].done !== true
         ) {
+            console.log("messgae",messages)
             console.log("Please wait for the response");
         } else {
 
@@ -167,7 +178,7 @@ const useChat = (initialChatId= '') => {
         let _messages: any[] = [];
 
         let selectedModelId: string[] | null = modelId ? [modelId] : selectedModels;
-        let _chatId;
+        let _chatId = chatId || '';
         const responseMessageIds: { [key: string]: string } = {};
 
         // create resposne message fo reach selected model
@@ -261,6 +272,7 @@ const useChat = (initialChatId= '') => {
 
                 // getWebSearchResults  --enable 0r disable-- ----------------api here
                 let responseMessageId = responseMessageIds[modelId];
+                console.log("responseMessageId", responseMessageId);
                 let _response;
                 if (model?.owned_by === "openai") {
                     // openai api here
@@ -659,7 +671,7 @@ const useChat = (initialChatId= '') => {
         // await mermaid.run({
         // 	querySelector: '.mermaid'
         // });
-
+console.log("chat completed handler function called",chatId);
         const res = await chatCompleted(localStorage.token, {
             model: modelId,
             messages: messages.map((m) => ({

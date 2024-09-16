@@ -132,7 +132,8 @@ function ChatSection({ chat,streamText }: any) {
           />
 
           {/* Answer */}
-          {history?.currentId === message?.id && (
+          {/* {history?.currentId === message?.id && ( */}
+          {message?.role ==='assistant' && (
             <div id='answerBlock'>
               <Box display={"flex"} alignItems={"start"} gap={2} id='answer-div'>
                 <Avatar />
