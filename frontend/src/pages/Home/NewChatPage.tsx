@@ -10,10 +10,11 @@ type NewChatPageProps = {
 }
 
 type Props ={
-  promptSuggestions : NewChatPageProps[]
+  promptSuggestions : NewChatPageProps[],
+  setPrompt : (value:string) => void
 }
 
-const NewChatPage = ({promptSuggestions} : Props) => {
+const NewChatPage = ({promptSuggestions,setPrompt} : Props) => {
   const theme = useTheme();
   return (
 
@@ -55,6 +56,7 @@ const NewChatPage = ({promptSuggestions} : Props) => {
             {promptSuggestions?.map((prompt:NewChatPageProps, index:number) => (
               <Stack
               component={Button}
+              onClick={() => setPrompt(prompt.content)}
                 key={index}
                 p={2.3}
                 bgcolor={theme.palette.grey[200]}

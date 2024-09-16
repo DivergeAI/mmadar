@@ -1,7 +1,9 @@
 
 export const VERSION = 'api/v1'
-export const BASE_URL = 'https://0a53-39-43-208-192.ngrok-free.app'
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL
 export const API_BASE_URL = `${BASE_URL}/${VERSION}`
+
+export const OLLAMA_API_BASE_URL = `${BASE_URL}/ollama`
 
 export const TITLE_GENERATION_PROMPT: string = "Here is the query:\n{{prompt:middletruncate:8000}}\n\nCreate a concise, 3-5 word phrase with an emoji as a title for the previous query. Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting. RESPOND ONLY WITH THE TITLE TEXT.\n\nExamples of titles:\n📉 Stock Market Trends\n🍪 Perfect Chocolate Chip Recipe\nEvolution of Music Streaming\nRemote Work Productivity Tips\nArtificial Intelligence in Healthcare\n🎮 Video Game Development Insights"
 

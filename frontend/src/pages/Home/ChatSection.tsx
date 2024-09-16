@@ -1,13 +1,108 @@
-import { CopyAllOutlined, EditOutlined } from "@mui/icons-material";
-import { Avatar, Box, Icon, IconButton, Stack, TextField, Tooltip, useTheme } from "@mui/material";
+// import { CopyAllOutlined, EditOutlined, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+// import { Avatar, Box, Icon, IconButton, Stack, TextField, Tooltip, useTheme } from "@mui/material";
+// import { Fragment, useState } from "react";
+// import Text from "../../components/common/Text";
+// import AnswerControls from "./AnswerControls";
+// import UniversalButton from "../../components/common/UniversalButton";
+// import UserMessage from "./UserMessage";
+
+// function ChatSection({ chat,setChat }: any) {
+//   console.log(chat)
+//   const theme = useTheme();
+//   const [editIndex, setEditIndex] = useState<number | null>(null);
+//   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+//   const handleEditClick = (index: number) => {
+//     setEditIndex(index);
+//   };
+
+//   const handleCancelClick = () => {
+//     setEditIndex(null);
+//   };
+//   let messages = chat?.chat?.messages
+//   let history = chat?.chat?.history
+// console.log(chat)
+
+//   return (
+//     <Box display={"flex"} gap={3} flexDirection={"column"}>
+//       {/* Question */}
+//       {messages?.map((message, index) => (
+//         <Fragment key={index}>
+//           <UserMessage 
+//           index={index} 
+//           activeIndex={activeIndex}
+//           setActiveIndex={setActiveIndex}
+//           history={history}
+//           message={message}
+//           siblings = { Object.values(history?.messages).filter((message:any) => message?.parentId=== null)?.map((message:any) => message.id)} 
+//           editIndex = {editIndex} 
+//           handleEdit={handleEditClick} 
+//           handleCancel={handleCancelClick}
+//           />
+
+//           {/* Answer */}
+//           {history?.currentId === message.id && (
+//             <div id='answerBlock'>
+//               <Box display={"flex"} alignItems={"start"} gap={2} id='answer-div'>
+//                 <Avatar />
+//                 <Box display='flex' flexDirection='column' width={'100%'} gap={1}>
+//                   {/* model name & time (when hover) */}
+//                   <Box display={'flex'} gap={1} alignItems={'center'}>
+//                     <Text fontSize="14px" fontWeight="600">{history?.messages[message?.parentId]?.models}</Text>
+//                     <Text
+//                       fontSize="0.75rem"
+//                       fontWeight="500"
+//                       color={theme.palette.grey[500]}
+//                       sx={{
+//                         textTransform: 'uppercase'
+//                       }}
+//                       props={{
+//                         className: 'time-text'
+//                       }}
+//                     >11:01Am</Text>
+//                   </Box>
+//                   {/* answer */}
+//                   <Box
+//                     p={1}
+//                     mb={1}
+//                     width='100%'
+//                     sx={{
+//                       padding: "0rem 0",
+//                       borderRadius: "1rem",
+//                       // backgroundColor: theme.palette.grey[200],
+//                     }}
+//                   >
+//                     <pre>
+//                       {history?.messages[message?.id]?.content} </pre>
+//                   </Box>
+
+//                   {/* controls */}
+//                   <AnswerControls siblings={history?.messages[message?.parentId].childrenIds ?? []} />
+//                 </Box>
+//               </Box>
+//             </div>
+//           )}
+
+//         </Fragment>
+//       ))}
+//     </Box>
+//   );
+// }
+
+// export default ChatSection;
+
+
+
+import { Avatar, Box, useTheme } from "@mui/material";
 import { Fragment, useState } from "react";
 import Text from "../../components/common/Text";
 import AnswerControls from "./AnswerControls";
-import UniversalButton from "../../components/common/UniversalButton";
+import UserMessage from "./UserMessage";
 
-function ChatSection() {
+function ChatSection({ chat,streamText }: any) {
   const theme = useTheme();
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const handleEditClick = (index: number) => {
     setEditIndex(index);
@@ -16,193 +111,69 @@ function ChatSection() {
   const handleCancelClick = () => {
     setEditIndex(null);
   };
+  let messages = chat?.chat?.messages
+  let history = chat?.chat?.history
 
   return (
     <Box display={"flex"} gap={3} flexDirection={"column"}>
       {/* Question */}
-      {[...Array(3).keys()].map((item, index) => (
+      {messages?.map((message, index) => (
         <Fragment key={index}>
-          {editIndex === index ? (
-            <Box
-              p={1}
-              mb={1}
-              maxWidth={"100%"}
-              width={"100%"}
-              marginLeft={"auto"}
-              sx={{
-                padding: "0.75rem 1.25rem",
-                borderRadius: "1.25rem",
-                backgroundColor: theme.palette.grey[200],
-              }}
-            >
-              <TextField
-                value="What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter."
-                variant="outlined"
-                placeholder="Feel free to add specific details"
-                fullWidth
-                autoFocus
-                multiline
-                rows={2}
-                maxRows={2}
-                onFocus={(event) => {
-                  const input = event.target;
-                  const length = input.value.length;
-                  input.setSelectionRange(length, length);
-                }}
-              
-                sx={{
-                  marginY: '1rem',
-                  '& .MuiInputBase-root': {
-                    padding: '0 !important',
-                    '& textarea': {
-                      resize: 'none',
-                      fontFamily: 'system-ui',
-                      fontSize: '1rem',
-                      lineHeight: '1.5rem',
-                      fontWeight: '400',
-                    }
-                  },
-                  '& :focus': {
-                    borderColor: 'inherit !important'
-                  },
-                  '& fieldset': {
-                    border : 'none'
-                  },
-                  '& :hover': {
-                    borderColor: 'inherit !important'
-                  }
-                }}
-              />
-              <Stack direction={'row'} justifyContent={'end'} gap={1}>
-                <UniversalButton
-                  label={"Cancel"}
-                  width={"fit-content"}
-                  fontSize={"medium"}
-                  textColor="grey.900"
-                  onClick={handleCancelClick}
-                  sx={{
-                    fontWeight: "500",
-                    backgroundColor: "common.white",
-                    border: "none ",
-                    borderRadius: "10rem",
-                    padding: "0.75rem 1rem",
-                    lineHeight: "1",
-                    "&:hover": {
-                      backgroundColor: 'grey.300',
-                    },
-                  }}
-                />
-                <UniversalButton
-                  label={"Send"}
-                  width={"fit-content"}
-                  fontSize={"medium"}
-                  textColor="common.white"
-                  sx={{
-                    fontWeight: "500",
-                    backgroundColor: "common.black",
-                    border: "none ",
-                    borderRadius: "10rem",
-                    padding: "0.75rem 1rem",
-                    lineHeight: "1",
-                    "&:hover": {
-                      backgroundColor: 'common.black',
-                    },
-                  }}
-                />
-              </Stack>
-            </Box>
-          ) : (
-            <div id="question-div">
-              <Box
-                p={1}
-                mb={1}
-                maxWidth={"90%"}
-                width={"fit-content"}
-                marginLeft={"auto"}
-                sx={{
-                  padding: "0.5rem 1.25rem",
-                  borderRadius: "1.25rem",
-                  backgroundColor: theme.palette.grey[200],
-                }}
-              >
-                <pre>
-                  What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter.
-                </pre>
-              </Box>
+          <UserMessage 
+          index={index} 
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          history={history}
+          message={message}
+          siblings = { Object.values(history?.messages).filter((message:any) => message?.parentId=== null)?.map((message:any) => message.id)} 
+          editIndex = {editIndex} 
+          handleEdit={handleEditClick} 
+          handleCancel={handleCancelClick}
+          />
 
-              {/* copy Buttons */}
-              <Box
-                display={"flex"}
-                justifyContent={"flex-end"}
-                gap={1}
-                className="copy-buttons"
-              >
-                <Tooltip title='Copy'>
-                  <IconButton
+          {/* Answer */}
+          {history?.currentId === message?.id && (
+            <div id='answerBlock'>
+              <Box display={"flex"} alignItems={"start"} gap={2} id='answer-div'>
+                <Avatar />
+                <Box display='flex' flexDirection='column' width={'100%'} gap={1}>
+                  {/* model name & time (when hover) */}
+                  <Box display={'flex'} gap={1} alignItems={'center'}>
+                    <Text fontSize="14px" fontWeight="600">{history?.messages[message?.parentId]?.models}</Text>
+                    <Text
+                      fontSize="0.75rem"
+                      fontWeight="500"
+                      color={theme.palette.grey[500]}
+                      sx={{
+                        textTransform: 'uppercase'
+                      }}
+                      props={{
+                        className: 'time-text'
+                      }}
+                    >11:01Am</Text>
+                  </Box>
+                  {/* answer */}
+                  <Box
+                    p={1}
+                    mb={1}
+                    width='100%'
                     sx={{
-                      padding: '0.2rem !important',
-                      fontSize: '1rem',
-                      '&:hover': {
-                        backgroundColor: theme.palette.grey[600]
-                      }
-                    }}>
-                    <Icon fontSize="small">
-                      <CopyAllOutlined />
-                    </Icon>
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title='Edit'>
-                  <IconButton onClick={() => handleEditClick(index)}>
-                    <Icon fontSize="small">
-                      <EditOutlined />
-                    </Icon>
-                  </IconButton>
-                </Tooltip>
+                      padding: "0rem 0",
+                      borderRadius: "1rem",
+                      // backgroundColor: theme.palette.grey[200],
+                    }}
+                  >
+                    <pre>
+                      {message.content || streamText} </pre>
+                  </Box>
+
+                  {/* controls */}
+                  <AnswerControls siblings={history?.messages[message?.parentId].childrenIds ?? []} />
+                </Box>
               </Box>
             </div>
           )}
 
-          {/* Answer */}
-          <div id='answerBlock'>
-            <Box display={"flex"} alignItems={"start"} gap={2} id='answer-div'>
-              <Avatar />
-              <Box display='flex' flexDirection='column' width={'100%'} gap={1}>
-                {/* model name & time (when hover) */}
-                <Box display={'flex'} gap={1} alignItems={'center'}>
-                  <Text fontSize="14px" fontWeight="600">Model Name</Text>
-                  <Text
-                    fontSize="0.75rem"
-                    fontWeight="500"
-                    color={theme.palette.grey[500]}
-                    sx={{
-                      textTransform: 'uppercase'
-                    }}
-                    props={{
-                      className: 'time-text'
-                    }}
-                  >11:01Am</Text>
-                </Box>
-                {/* answer */}
-                <Box
-                  p={1}
-                  mb={1}
-                  width='100%'
-                  sx={{
-                    padding: "0.5rem 1.25rem",
-                    borderRadius: "1rem",
-                    backgroundColor: theme.palette.grey[200],
-                  }}
-                >
-                  <pre>
-                    What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter.
-                  </pre>
-                </Box>
-
-                {/* controls */}
-                <AnswerControls />
-              </Box>
-            </Box>
-          </div>
         </Fragment>
       ))}
     </Box>

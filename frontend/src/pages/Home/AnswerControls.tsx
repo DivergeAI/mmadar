@@ -5,9 +5,8 @@ import { Box, Button, Chip, Icon, IconButton, Stack, TextField, Tooltip, useThem
 import Text from '../../components/common/Text';
 import UniversalButton from '../../components/common/UniversalButton';
 
-function AnswerControls() {
+function AnswerControls({siblings}: any) {
   const theme = useTheme();
-
   const [responseType, setResponseType] = React.useState<'good' | 'bad' | null>(null);
 
   const controls: CONTROLS[] = [

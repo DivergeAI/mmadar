@@ -1,6 +1,40 @@
 import { API_BASE_URL } from "../../utils/constants";
 import { getTimeRange } from "../../utils/functions";
 
+// create new chat
+export const createNewChat = async (payload : {token: string , chat: object}) => {
+let {token ='',chat} = payload
+	let error = null;
+
+	const res = await fetch(`${API_BASE_URL}/chats/new`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			authorization: `Bearer ${token}`
+		},
+		body: JSON.stringify({
+			chat: chat
+		})
+	})
+		.then(async (res) => {
+			if (!res.ok) throw await res.json();
+			return res.json();
+		})
+		.catch((err) => {
+			error = err;
+			console.log(err);
+			return null;
+		});
+
+	if (error) {
+		throw error;
+	}
+
+	return res;
+};
+
+
 
 // Get ALl chat list
 export const getChatList = async (token: string = '', page: number | null = null) => {
@@ -366,6 +400,42 @@ export const getAllChatTags = async (token: string = '') => {
 		})
 		.catch((err) => {
 			error = err;
+			console.log(err);
+			return null;
+		});
+
+	if (error) {
+		throw error;
+	}
+
+	return res;
+};
+
+
+// get Chat by ID
+
+
+export const getChatById = async (token: string, id: string) => {
+	let error = null;
+
+	const res = await fetch(`${API_BASE_URL}/chats/${id}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			...(token && { authorization: `Bearer ${token}` })
+		}
+	})
+		.then(async (res) => {
+			if (!res.ok) throw await res.json();
+			return res.json();
+		})
+		.then((json) => {
+			return json;
+		})
+		.catch((err) => {
+			error = err;
+
 			console.log(err);
 			return null;
 		});

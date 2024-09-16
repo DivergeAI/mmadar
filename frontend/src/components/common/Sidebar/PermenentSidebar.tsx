@@ -44,7 +44,6 @@ const {data: AllTags} = useQuery({
   queryFn : ()=> getAllChatTags(token),
   retry : 1
 })
-console.log("All Chat tags",AllTags)
 
   const controls = [
     {

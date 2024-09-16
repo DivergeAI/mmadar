@@ -15,7 +15,14 @@ import { Fragment } from "react/jsx-runtime";
 import Text from "../../components/common/Text";
 import UploadFileDisplay from "../../components/common/Sidebar/UploadFileDisplay";
 
-function SearchSection() {
+
+type SearchSectionProps = {
+  search: string;
+  setSearch: (value: string) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+};
+
+function SearchSection({search,setSearch,handleSubmit}:SearchSectionProps) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -48,9 +55,13 @@ function SearchSection() {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+
+
+
   return (
     <Fragment>
       <Box
+      onSubmit={handleSubmit}
         component="form"
         display={"flex"}
         width={"100%"}
@@ -72,6 +83,8 @@ function SearchSection() {
           </Stack>
 
           <TextField
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             variant="outlined"
             placeholder="Search"
             fullWidth
@@ -122,8 +135,9 @@ function SearchSection() {
             color: theme.palette.common.white,
           }}
         >
-          <Tooltip title="Upload Image">
+          <Tooltip title="Send message">
             <IconButton
+            type="submit"
               sx={{
                 color: theme.palette.common.white,
               }}

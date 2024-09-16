@@ -50,36 +50,40 @@ const shareOptions = [
   },
 ];
 
-const containsText = (text: string, searchText: string) =>{
+const containsText = (text: string, searchText: string) => {
   if (searchText === '') {
     return true;
   }
   text.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
 }
 
-const allOptions = ["maxtrial:latest"];
 
-const HeaderSection = ({models}:any) => {
+const HeaderSection = ({ models , selectedModels,setSelectedModels }: any) => {
   const theme = useTheme();
   const [isArchivedChats, setIsArchivedChats] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
-  const [selectedOption, setSelectedOption] = useState("");
-  const [createModels, setCreateModels] = useState<string[]>([""]);
-console.log("AllModelList",models)
+  
+
+
   const handleAddModels = () => {
-    setCreateModels([...createModels, ""]);
+    setSelectedModels([...selectedModels, ""]);
   };
 
   const handleRemoveModel = (index: number) => {
-    setCreateModels(createModels.filter((_, i) => i !== index));
+    setSelectedModels(selectedModels.filter((_, i:number) => i !== index));
   };
 
   const displayedOptions = useMemo(
-    () => models?.filter((option) => containsText(option?.name, searchText)),
+    () => models?.filter((option:any) => containsText(option?.name, searchText)),
     [searchText]
   );
 
-
+  const handleSelectModelChange = (value: string, index: number) => {
+   
+    const newModels = [...selectedModels];
+    newModels[index] = value;
+    setSelectedModels(newModels);
+  }
   const controls = [
     {
       name: "Settings",
@@ -119,13 +123,25 @@ console.log("AllModelList",models)
     <Fragment>
       <Box display={"flex"} alignItems={"start"} justifyContent={"space-between"}>
         <Box >
-          {createModels?.map((model, index) => (
+          {selectedModels?.map((model:string, index:number) => (
             <Stack direction={'row'} gap={0} alignItems={'center'} key={index}>
               <FormControl fullWidth>
                 <Select
-value={selectedOption}
-onChange={(e) => setSelectedOption(e.target.value)}  // Ensure this is working
-onClose={() => setSearchText("")}
+                  value={model||""}
+                  onChange={(e) => handleSelectModelChange(e.target.value , index)}  // Ensure this is working
+                  onClose={() => setSearchText("")}
+                  labelId="search-select-label"
+                  id="search-select"
+                  label="Options"
+
+                  renderValue={(value) => (
+                    <Text fontSize="1.125rem" fontWeight="600">
+                      {value || "Select a Model"}
+                    </Text>
+                  )}
+                  displayEmpty
+                  IconComponent={KeyboardArrowDown}
+
                   MenuProps={{
                     PaperProps: {
                       sx: {
@@ -150,17 +166,7 @@ onClose={() => setSearchText("")}
                       horizontal: "left",
                     },
                   }}
-                  labelId="search-select-label"
-                  id="search-select"
-                  label="Options"
-                  
-                  renderValue={(value) => (
-                    <Text fontSize="1.125rem" fontWeight="600">
-                      {value || "Select a Model"}
-                    </Text>
-                  )}
-                  displayEmpty
-                  IconComponent={KeyboardArrowDown}
+                 
                   slotProps={{
                     input: { "aria-label": "Search" },
                   }}
@@ -185,12 +191,12 @@ onClose={() => setSearchText("")}
                     }
                   }}
                 >
-                  <ListSubheader 
-                  // disableGutters
-                  sx={{
-                    backgroundColor: theme.palette.common.white,
-                    lineHeight: "0",
-                  }}>
+                  <ListSubheader
+                    // disableGutters
+                    sx={{
+                      backgroundColor: theme.palette.common.white,
+                      lineHeight: "0",
+                    }}>
                     <TextField
                       size="small"
                       autoFocus
@@ -228,42 +234,42 @@ onClose={() => setSearchText("")}
                   </ListSubheader>
                   <Divider />
                   {displayedOptions?.length === 0 ? (
-                    <Box 
-                    boxSizing={'border-box'}
-                    width={"100%"}
+                    <Box
+                      boxSizing={'border-box'}
+                      width={"100%"}
                     >
                       <Text sx={{
-                                            margin : ".7rem 1.5rem"
+                        margin: ".7rem 1.5rem"
 
                       }}>
                         No result found
                       </Text>
                       <Box
-                      
-                      component={NavLink}
-                      to={'#'}
-                      sx={{
-                        display :'block',
-                        margin : " 0.7rem 1rem",
-                        padding : ".5rem .5rem .75rem",
-                        color: theme.palette.grey[800],
-                        fontSize: '.875rem',
-                        lineHeight: '1.25rem',
-                        fontWeight: '500',
-                        fontFamily: 'system-ui',
-                        textDecoration: 'none',
-                        ':hover': {
-                          borderRadius: '.5rem',
+
+                        component={NavLink}
+                        to={'#'}
+                        sx={{
+                          display: 'block',
+                          margin: " 0.7rem 1rem",
+                          padding: ".5rem .5rem .75rem",
                           color: theme.palette.grey[800],
-                          backgroundColor: "grey.400",
-                        }
-                      }}
+                          fontSize: '.875rem',
+                          lineHeight: '1.25rem',
+                          fontWeight: '500',
+                          fontFamily: 'system-ui',
+                          textDecoration: 'none',
+                          ':hover': {
+                            borderRadius: '.5rem',
+                            color: theme.palette.grey[800],
+                            backgroundColor: "grey.400",
+                          }
+                        }}
                       >
-                       Pull "{searchText}" from the Ollama.com
+                        Pull "{searchText}" from the Ollama.com
                       </Box>
                     </Box>
                   ) : (
-                    (displayedOptions || models)?.map((option : any, i) => (
+                    (displayedOptions || models)?.map((option: any) => (
                       <MenuItem
                         key={option?.id}
                         value={option.name}
@@ -293,42 +299,42 @@ onClose={() => setSearchText("")}
                             fontSize: ".875rem",
                           }}
                         >
-                         <Stack direction={'row'} alignItems={'end'}>
-  <Avatar
-    src={image}
-    sx={{
-      width: "1.25rem",
-      height: "1.25rem",
-      marginRight: "8px",
-    }}
-  />
-  <Text fontSize=".875rem" fontWeight="600">
-    {option?.name}
-  </Text>
-  {/* Wrap Tooltip around a Box or native element */}
-  <Tooltip title={`${option?.ollama?.details?.quantization_level} (${(option.ollama?.size / 1024 ** 3).toFixed(1)}GB)`} placement="top"
-  sx={{
-    '& .MuiTooltip-tooltip':{
-      fontSize: '.875rem !important',
-      fontWeight: '500',
-    }
-  }}>
-      <Text fontSize=".75rem" fontWeight="500" color="grey.900" sx={{ml:'2px'}}>
-        {option?.owned_by === 'ollama' ? option?.ollama.details.parameter_size : ''}
-      </Text>
-  </Tooltip>
-</Stack>
+                          <Stack direction={'row'} alignItems={'end'}>
+                            <Avatar
+                              src={image}
+                              sx={{
+                                width: "1.25rem",
+                                height: "1.25rem",
+                                marginRight: "8px",
+                              }}
+                            />
+                            <Text fontSize=".875rem" fontWeight="600">
+                              {option?.name}
+                            </Text>
+                            {/* Wrap Tooltip around a Box or native element */}
+                            <Tooltip title={`${option?.ollama?.details?.quantization_level} (${(option.ollama?.size / 1024 ** 3).toFixed(1)}GB)`} placement="top"
+                              sx={{
+                                '& .MuiTooltip-tooltip': {
+                                  fontSize: '.875rem !important',
+                                  fontWeight: '500',
+                                }
+                              }}>
+                              <Text fontSize=".75rem" fontWeight="500" color="grey.900" sx={{ ml: '2px' }}>
+                                {option?.owned_by === 'ollama' ? option?.ollama.details.parameter_size : ''}
+                              </Text>
+                            </Tooltip>
+                          </Stack>
 
-                         {selectedOption === option.name && (
-                          <Icon sx={{
-                            color: theme.palette.grey[800],
-                            width: '1rem',
-                            height: '1rem',
-                          }}>
-                            <Check/>
-                          </Icon>
-                         )}
-                        
+                          {model === option.name && (
+                            <Icon sx={{
+                              color: theme.palette.grey[800],
+                              width: '1rem',
+                              height: '1rem',
+                            }}>
+                              <Check />
+                            </Icon>
+                          )}
+
 
                         </Stack>
                       </MenuItem>
