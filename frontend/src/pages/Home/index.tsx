@@ -15,6 +15,10 @@ function Home() {
         streamText,
         setSelectedModels,
       handleSubmit,
+      stopResponse,
+      files,
+      setFiles,
+      deleteMessageHandler
     } = useChat();
 
 
@@ -31,7 +35,10 @@ function Home() {
         messages={messages}
         ApiConfigData={ApiConfigData}
         streamText={streamText}
-
+        stopResponse = {stopResponse}
+        files={files}
+        setFiles={setFiles}
+        deleteMessageHandler={deleteMessageHandler}
 
       />
     );

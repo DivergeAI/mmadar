@@ -3,14 +3,16 @@ import Text from '../Text';
 import { CancelRounded, Close, FileCopy } from '@mui/icons-material';
 import { formatFileSize } from '../../../utils/functions';
 
-function UploadFileDisplay({file}:any) {
+function UploadFileDisplay({file,removeFile,onFileClick}:any) {
     const theme = useTheme();
+
+
     return (
         <Box
         id = "upload-file-display"
         position={"relative"}
          display={"flex"}
-         border={`1 px solid ${theme.palette.grey[400]}`}
+         border={`1px solid ${theme.palette.grey[400]}`}
         sx={{
           background : theme.palette.common.white,
           width : '18rem',
@@ -19,7 +21,11 @@ function UploadFileDisplay({file}:any) {
           borderBottomRightRadius : '0.75rem', 
           cursor : 'pointer',
 
+          borderTopLeftRadius : '0.75rem',
+          borderBottomLeftRadius : '0.75rem',
+
         }}
+        onClick={onFileClick &&  onFileClick }
          >
           <Box 
           sx={{
@@ -31,10 +37,14 @@ function UploadFileDisplay({file}:any) {
                   }}>
          
             {/* <Icon fontSize='small'> */}
-              <FileCopy sx={{
+            {file?.status === 'processed' ? <FileCopy sx={{
                 width : 20,
                 height : 20,
-              }}/>
+              }}/> : <Close sx={{
+                width : 20,
+                height : 20,
+              }}/>}
+             
             {/* </Icon> */}
 
           </Box>
@@ -71,7 +81,8 @@ function UploadFileDisplay({file}:any) {
               </Text>
             </Stack>
             </Box>
-            <span 
+           {removeFile && <span 
+            onClick={() =>removeFile()}
              className = "close-icon"
             style={{
               position : 'absolute',
@@ -81,10 +92,10 @@ function UploadFileDisplay({file}:any) {
               cursor : 'pointer',
               borderRadius : '100%',
             }}>
-              <Icon fontSize='small'>
+              <Icon fontSize='small' >
                 <CancelRounded/>
               </Icon>
-            </span>
+            </span>}
             </Box> 
     );
 }

@@ -1,24 +1,60 @@
 import React, { Fragment } from 'react';
 import { CONTROLS } from '../../types/chat';
-import { ArrowLeft, ArrowRight, Cached, Close, ContentPasteRounded, KeyboardArrowLeft, KeyboardArrowRight, ModeEditOutlineOutlined, PlayCircleOutline, ThumbDownOffAlt, ThumbUpOffAlt, VolumeUpOutlined } from "@mui/icons-material";
+import { ArrowLeft, ArrowRight, Cached, Close, ContentPasteRounded, Info, KeyboardArrowLeft, KeyboardArrowRight, ModeEditOutlineOutlined, PlayCircleOutline, ThumbDownOffAlt, ThumbUpOffAlt, VolumeUpOutlined } from "@mui/icons-material";
 import { Box, Button, Chip, Icon, IconButton, Stack, TextField, Tooltip, useTheme } from '@mui/material';
 import Text from '../../components/common/Text';
 import UniversalButton from '../../components/common/UniversalButton';
+import { approximateToHumanReadable } from '../../utils/functions';
+import Markdown from 'markdown-to-jsx';
 
-function AnswerControls({siblings}: any) {
+function AnswerControls({ siblings, handleCopyText, message, regenerateResponse, onEdit, showPreviousMessage, showNextMessage, isLastMessage }: any) {
   const theme = useTheme();
   const [responseType, setResponseType] = React.useState<'good' | 'bad' | null>(null);
+
+
+  let tooltipContent = `response_token/s: ${`${Math.round(
+    ((message?.info?.eval_count ?? 0) / (message?.info?.eval_duration / 1000000000)) * 100
+  ) / 100
+    } tokens` ?? 'N/A'
+    }<br/>
+    prompt_token/s: ${Math.round(
+      ((message?.info?.prompt_eval_count ?? 0) /
+        (message?.info?.prompt_eval_duration / 1000000000)) *
+      100
+    ) / 100 ?? 'N/A'
+    } tokens<br/>
+              total_duration: ${Math.round(((message?.info?.total_duration ?? 0) / 1000000) * 100) / 100 ??
+    'N/A'
+    }ms<br/>
+              load_duration: ${Math.round(((message?.info?.load_duration ?? 0) / 1000000) * 100) / 100 ?? 'N/A'
+    }ms<br/>
+              prompt_eval_count: ${message?.info?.prompt_eval_count ?? 'N/A'}<br/>
+              prompt_eval_duration: ${Math.round(((message?.info?.prompt_eval_duration ?? 0) / 1000000) * 100) /
+    100 ?? 'N/A'
+    }ms<br/>
+              eval_count: ${message?.info?.eval_count ?? 'N/A'}<br/>
+              eval_duration: ${Math.round(((message?.info?.eval_duration ?? 0) / 1000000) * 100) / 100 ?? 'N/A'
+    }ms<br/>
+              approximate_total: ${approximateToHumanReadable(message?.info?.total_duration)}`;
 
   const controls: CONTROLS[] = [
     {
       icon: <ModeEditOutlineOutlined />,
       title: "Edit",
-      onClick: () => console.log('Edit clicked')
+      onClick: onEdit
     },
     {
       icon: <ContentPasteRounded />,
       title: "Copy",
-      onClick: () => console.log('Copy clicked')
+      onClick: handleCopyText
+    },
+    {
+      icon: <Info />,
+      title: "Generation Info",
+      info: <Markdown>
+        {tooltipContent}
+      </Markdown>,
+      onClick: () => console.log('Read Aloud clicked')
     },
     {
       icon: <VolumeUpOutlined />,
@@ -37,16 +73,20 @@ function AnswerControls({siblings}: any) {
       onClick: () => setResponseType(responseType === 'bad' ? null : 'bad'),
       active: responseType === 'bad'
     },
-    {
-      icon: <PlayCircleOutline />,
-      title: "Continue Response",
-      onClick: () => console.log('Continue Response clicked')
-    },
-    {
-      icon: <Cached />,
-      title: "Regenerate",
-      onClick: () => console.log('Regenerate clicked')
-    }
+    ...(isLastMessage ? [
+      {
+        icon: <PlayCircleOutline />,
+        title: "Continue Response",
+        onClick: () => console.log('Continue Response clicked')
+
+      },
+      {
+        icon: <Cached />,
+        title: "Regenerate",
+        onClick: () => regenerateResponse(message),
+      }] : [])
+
+
   ];
 
   const GOOD_RESPONSE = [
@@ -74,33 +114,34 @@ function AnswerControls({siblings}: any) {
   ];
 
   const responseOptions = responseType === 'good' ? GOOD_RESPONSE : BAD_RESPONSE;
-
   return (
     <Fragment>
       <Box className='controls' display={'flex'} gap={1} mb={1} alignItems={"center"}>
-        <Stack direction={'row'} alignItems={'center'}>
-          <IconButton>
-          <Icon fontSize='small'>
-            <KeyboardArrowLeft />
-          </Icon >
+        {siblings?.length > 1 && <Stack direction={'row'} alignItems={'center'}>
+          <IconButton onClick={() => showPreviousMessage(message)}>
+            <Icon fontSize='small'>
+              <KeyboardArrowLeft />
+            </Icon >
           </IconButton>
-         
-<Text fontSize='.875rem' fontWeight='600'
-sx={{
-  letterSpacing : '.1em'
-}}>
-  2/2
-</Text>
-          <IconButton>
-          <Icon fontSize='small'>
-            <KeyboardArrowRight />
-          </Icon>
+
+          <Text fontSize='.875rem' fontWeight='600'
+            sx={{
+              letterSpacing: '.1em'
+            }}>
+            {siblings.indexOf(message?.id) + 1}/{siblings.length}
+          </Text>
+          <IconButton onClick={() => showNextMessage(message)}>
+            <Icon fontSize='small'>
+              <KeyboardArrowRight />
+            </Icon>
           </IconButton>
-        </Stack >
+        </Stack >}
+
         {controls.map((control) => (
+
           <Tooltip title={control.title} key={control?.title}>
             <IconButton
-            size='small'
+              size='small'
               onClick={control.onClick}
               sx={{
                 padding: '0.2rem !important',
@@ -112,9 +153,22 @@ sx={{
                 }
               }}
             >
-              <Icon fontSize='small'>{control.icon}</Icon>
+              {control.info ? (
+                <Tooltip title={control.info} placement="top" >
+                  <Icon fontSize='small'>{control.icon}</Icon>
+
+                </Tooltip>
+              ) :
+
+                <Icon fontSize='small'>{control.icon}</Icon>
+              }
+
             </IconButton>
+
+
+
           </Tooltip>
+
         ))}
       </Box>
 
@@ -167,54 +221,54 @@ sx={{
               sx={{
                 marginY: '1rem',
                 '& .MuiInputBase-root': {
-                    padding: '0 !important',
-                    '& textarea': {
-                        padding: '1rem',
-                        // resize: 'vertical',
-                        fontFamily: 'system-ui',
-                        fontSize: '.87rem',
-                        fontWeight: '400',
-                    }
+                  padding: '0 !important',
+                  '& textarea': {
+                    padding: '1rem',
+                    // resize: 'vertical',
+                    fontFamily: 'system-ui',
+                    fontSize: '.87rem',
+                    fontWeight: '400',
+                  }
                 },
                 '& :focus': {
-                    borderColor: 'inherit !important'
+                  borderColor: 'inherit !important'
                 },
                 '& fieldset': {
-border : 'none'
+                  border: 'none'
                 },
                 '& :hover': {
-                    borderColor: 'inherit !important'
+                  borderColor: 'inherit !important'
                 }
-            }}
-             
+              }}
+
             />
           </Stack>
 
           {/* Footer */}
           <Box display={'flex'} flexDirection={'row-reverse'}>
-          <UniversalButton
-                    label={"Save"}
-                    width={"fit-content"}
-                    // height={"fit-content"}
-                    fontSize={"medium"}
-                    textColor="common.white"
-                    sx={{
-                        m: '1rem',
-                      fontWeight: "500",
-                      backgroundColor: "success.main",
-                      border: "none ",
-                      
-                      borderRadius: ".5em",
-                      padding: "0.75rem 1rem",
-                      lineHeight: "1",
-                      "&:hover": {
-                        backgroundColor: 'success.dark',
-                      },
-                    }}
-                    // startIcon  = {<Icon>
-                    //     <ImportExport />
-                    // </Icon> }
-                  />
+            <UniversalButton
+              label={"Save"}
+              width={"fit-content"}
+              // height={"fit-content"}
+              fontSize={"medium"}
+              textColor="common.white"
+              sx={{
+                m: '1rem',
+                fontWeight: "500",
+                backgroundColor: "success.main",
+                border: "none ",
+
+                borderRadius: ".5em",
+                padding: "0.75rem 1rem",
+                lineHeight: "1",
+                "&:hover": {
+                  backgroundColor: 'success.dark',
+                },
+              }}
+            // startIcon  = {<Icon>
+            //     <ImportExport />
+            // </Icon> }
+            />
           </Box>
         </Box>
       )}

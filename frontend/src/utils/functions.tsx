@@ -188,3 +188,78 @@ export const removeEmojis = (str) => {
 	// Replace emojis with an empty string
 	return str.replace(emojiRegex, '');
 };
+
+
+// copy to clipboard
+
+export const copyToClipboard = async (text) => {
+	let result = false;
+	if (!navigator.clipboard) {
+		const textArea = document.createElement('textarea');
+		textArea.value = text;
+
+		// Avoid scrolling to bottom
+		textArea.style.top = '0';
+		textArea.style.left = '0';
+		textArea.style.position = 'fixed';
+
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+
+		try {
+			const successful = document.execCommand('copy');
+			const msg = successful ? 'successful' : 'unsuccessful';
+			console.log('Fallback: Copying text command was ' + msg);
+			result = true;
+		} catch (err) {
+			console.error('Fallback: Oops, unable to copy', err);
+		}
+
+		document.body.removeChild(textArea);
+		return result;
+	}
+
+	result = await navigator.clipboard
+		.writeText(text)
+		.then(() => {
+			console.log('Async: Copying to clipboard was successful!');
+			return true;
+		})
+		.catch((error) => {
+			console.error('Async: Could not copy text: ', error);
+			return false;
+		});
+
+	return result;
+};
+
+
+export const approximateToHumanReadable = (nanoseconds: number) => {
+	const seconds = Math.floor((nanoseconds / 1e9) % 60);
+	const minutes = Math.floor((nanoseconds / 6e10) % 60);
+	const hours = Math.floor((nanoseconds / 3.6e12) % 24);
+
+	const results: string[] = [];
+
+	if (seconds >= 0) {
+		results.push(`${seconds}s`);
+	}
+
+	if (minutes > 0) {
+		results.push(`${minutes}m`);
+	}
+
+	if (hours > 0) {
+		results.push(`${hours}h`);
+	}
+
+	return results.reverse().join(' ');
+};
+
+
+export const blobToFile = (blob, fileName) => {
+	// Create a new File object from the Blob
+	const file = new File([blob], fileName, { type: blob.type });
+	return file;
+};

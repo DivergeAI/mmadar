@@ -15,8 +15,17 @@ function Chat() {
         setSelectedModels,
       handleSubmit,
       streamText,
+      sendPrompt,
+      setHistory,
+      stopResponse,
+      showNextMessage,
+      showPreviousMessage,
+      confirmEditMessage,
+      regenerateResponse ,
+      files,
+      setFiles   ,
+      deleteMessageHandler,
     } = useChat( id );
-
 
     return (
  <ChatLayout
@@ -28,6 +37,16 @@ function Chat() {
  searchPrompt={searchPrompt}
  setSearchPrompt={setSearchPrompt}
  streamText={streamText}
+ sendPrompt={sendPrompt}
+ setHistory={setHistory}
+ stopResponse = {stopResponse}
+ showNextMessage ={showNextMessage}
+showPreviousMessage ={showPreviousMessage}
+confirmEditMessage ={confirmEditMessage}
+regenerateResponse ={regenerateResponse}
+files={files}
+setFiles={setFiles}
+deleteMessageHandler={deleteMessageHandler}
  />
     );
 }

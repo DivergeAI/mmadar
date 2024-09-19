@@ -6,6 +6,7 @@ import ChatSection from '../Home/ChatSection';
 import SearchSection from '../Home/SearchSection';
 import Text from '../../components/common/Text';
 import NewChatPage from './NewChatPage';
+import { FileItem } from '../../types/chat';
 
 type ChatLayoutProps = {
     chatResponse: any;
@@ -18,6 +19,16 @@ type ChatLayoutProps = {
     streamText ?: string;
     ApiConfigData?: any;
     messages?: any;
+    sendPrompt?: any;
+    setHistory?: any;
+    stopResponse :()=> void
+    showNextMessage ?: (message:any)=> void
+showPreviousMessage ?: (message:any)=> void
+confirmEditMessage ?: (messageId: any,content:string)=>void
+regenerateResponse ?: (message:any)=>void
+files : FileItem[],
+setFiles : (files:FileItem[])=>void,
+deleteMessageHandler : (messageId:any)=>void
 };
 
 
@@ -31,8 +42,18 @@ const ChatLayout = ({
     AllModelList,
     streamText,
     ApiConfigData,
+    sendPrompt,
+    setHistory,
+    stopResponse,
+    showNextMessage,
+showPreviousMessage,
+confirmEditMessage,
+regenerateResponse,
+files,
+deleteMessageHandler,
+setFiles
+
 }:ChatLayoutProps) => {
-    console.log(chatResponse);
     return (
         <Box
             display={'flex'}
@@ -58,7 +79,20 @@ const ChatLayout = ({
                 sx={{ overflowY: 'auto' }}
             >
                  {chatResponse?.chat?.messages?.length > 0 ? (
-                <ChatSection chat={chatResponse} streamText={streamText}/>
+                <ChatSection 
+                chat={chatResponse} 
+                streamText={streamText} 
+                selectedModels={selectedModels} 
+                sendPrompt={sendPrompt} 
+                setHistory={setHistory}
+                showNextMessage={showNextMessage}
+                showPreviousMessage={showPreviousMessage}
+                    confirmEditMessage={confirmEditMessage}
+                    regenerateResponse={regenerateResponse}
+                    files ={files}
+                    setFiles ={setFiles}
+                    deleteMessageHandler={deleteMessageHandler}
+                />
             ) : (
                     <NewChatPage
                         promptSuggestions={ApiConfigData?.default_prompt_suggestions}
@@ -77,6 +111,10 @@ const ChatLayout = ({
                     search={searchPrompt}
                     setSearch={setSearchPrompt}
                     handleSubmit={handleSubmit}
+                    stopResponse = {stopResponse}
+                    files={files}
+                    setFiles={setFiles}
+
                 />
                 <Text
                     fontSize='.75rem'
