@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
         path: "workspace",
         element: <Workspace />,
         children: [
-          { path: "", element: <Navigate to="models" replace /> }, // Redirect to models
+          { path: "", element: <Navigate to="documents" replace /> }, // Redirect to models
           {
             path: "models",
             element: <Models />,

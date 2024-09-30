@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "../../utils/constants";
 import { getUserPosition } from "../../utils/functions";
 
-export const getAndUpdateUserLocation = async (token: string) => {
+export const getAndUpdateUserLocation = async (token: any) => {
 	const location = await getUserPosition().catch((err) => {
 		throw err;
 	});

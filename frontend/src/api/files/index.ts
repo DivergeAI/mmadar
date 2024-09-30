@@ -1,7 +1,7 @@
 import { FileItem } from "../../types/chat";
 import { API_BASE_URL } from "../../utils/constants";
 
-export const uploadFile = async (token: string, file: File |FileItem) => {
+export const uploadFile = async (token: string| null, file: File |FileItem|Blob) => {
 	const data = new FormData();
 	data.append('file', file);
 	let error = null;

@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../../utils/constants";
 import { getTimeRange } from "../../utils/functions";
 
 // create new chat
-export const createNewChat = async (payload : {token: string , chat: object}) => {
+export const createNewChat = async (payload : {token: string|undefined , chat: object}) => {
 let {token ='',chat} = payload
 	let error = null;
 

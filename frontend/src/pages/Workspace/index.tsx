@@ -1,38 +1,44 @@
 import { Box, Divider, Stack, useTheme } from '@mui/material';
 import { NavLink, Outlet } from 'react-router-dom';
 import Text from '../../components/common/Text';
+import { useEffect } from 'react';
 
 function Workspace() {
     const theme = useTheme();
-    const WorkspaceRoute = [
-        {
-            to: 'models',
-            label: 'Models'
-        },
-        {
-            to: 'prompts',
-            label: 'Prompts'
-        },
-        {
-            to: 'documents',
-            label: 'Documents'
-        },
-        {
-            to: 'tools',
-            label: 'Tools'
-        },
-        {
-            to: 'functions',
-            label: 'Functions'
-        }
+    const WorkspaceRoute:any = [
+        // {
+        //     to: 'models',
+        //     label: 'Models'
+        // },
+        // {
+        //     to: 'prompts',
+        //     label: 'Prompts'
+        // },
+        // {
+        //     to: 'documents',
+        //     label: 'Documents'
+        // },
+        // {
+        //     to: 'tools',
+        //     label: 'Tools'
+        // },
+        // {
+        //     to: 'functions',
+        //     label: 'Functions'
+        // }
 
     ]
+
+    useEffect(() => {
+        document.title = 'Documents';
+    }, []);
     return (
         <Stack direction={'column'} spacing={1} 
         >
             <Box px={4} pt={3}>
                 <Text fontSize='1.24rem' fontWeight='600'>
-                    Workspace
+                    {/* Workspace */}
+                    Documents
                 </Text>
             </Box>
 
@@ -48,10 +54,10 @@ function Workspace() {
                     sx={{
                         backgroundColor: theme.palette.background.main,
                     }}>
-                    {WorkspaceRoute.map((route, index) => (
+                    {WorkspaceRoute?.map((route:any) => (
                         <NavLink
-                        key={route.to}
-                            to={route.to}
+                        key={route?.to}
+                            to={route?.to}
                             style={({ isActive }) => ({
                                 textDecoration: 'none',
                                 borderRadius: '8px',

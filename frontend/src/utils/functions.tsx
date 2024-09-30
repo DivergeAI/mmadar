@@ -1,3 +1,129 @@
+import { BASE_URL } from "./constants";
+
+export const handleCopyText = async(text:string)=>{
+	const res = await copyToClipboard(text);
+		if(res){
+			console.log("message copied")
+		}
+	}
+
+	export const transformFileName = (fileName) => {
+		// Convert to lowercase
+		const lowerCaseFileName = fileName.toLowerCase();
+	
+		// Remove special characters using regular expression
+		const sanitizedFileName = lowerCaseFileName.replace(/[^\w\s]/g, '');
+	
+		// Replace spaces with dashes
+		const finalFileName = sanitizedFileName.replace(/\s+/g, '-');
+	
+		return finalFileName;
+	};
+
+	export const removeFirstHashWord = (inputString) => {
+		// Split the string into an array of words
+		const words = inputString.split(' ');
+	
+		// Find the index of the first word that starts with #
+		const index = words.findIndex((word) => word.startsWith('#'));
+	
+		// Remove the first word with #
+		if (index !== -1) {
+			words.splice(index, 1);
+		}
+	
+		// Join the remaining words back into a string
+		const resultString = words.join(' ');
+	
+		return resultString;
+	};
+
+export const replaceTokens = (content:string, char:string, user:string) => {
+	const charToken = /{{char}}/gi;
+	const userToken = /{{user}}/gi;
+	const videoIdToken = /{{VIDEO_FILE_ID_([a-f0-9-]+)}}/gi; // Regex to capture the video ID
+	const htmlIdToken = /{{HTML_FILE_ID_([a-f0-9-]+)}}/gi; // Regex to capture the HTML ID
+
+	// Replace {{char}} if char is provided
+	if (char !== undefined && char !== null) {
+		content = content.replace(charToken, char);
+	}
+
+	// Replace {{user}} if user is provided
+	if (user !== undefined && user !== null) {
+		content = content.replace(userToken, user);
+	}
+
+	// Replace video ID tags with corresponding <video> elements
+	content = content.replace(videoIdToken, (match:any, fileId:any) => {
+		const videoUrl = `${BASE_URL}/api/v1/files/${fileId}/content`;
+		return `<video src="${videoUrl}" controls></video>`;
+	});
+
+	// Replace HTML ID tags with corresponding HTML content
+	content = content.replace(htmlIdToken, (match:any, fileId:any) => {
+		const htmlUrl = `${BASE_URL}/api/v1/files/${fileId}/content`;
+		return `<iframe src="${htmlUrl}" width="100%" frameborder="0" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+20)+'px';"></iframe>`;
+	});
+
+	return content;
+};
+
+const convertLatexToSingleLine = (content:any) => {
+	// Patterns to match multiline LaTeX blocks
+	const patterns = [
+		/(\$\$[\s\S]*?\$\$)/g, // Match $$ ... $$
+		/(\\\[[\s\S]*?\\\])/g, // Match \[ ... \]
+		/(\\begin\{[a-z]+\}[\s\S]*?\\end\{[a-z]+\})/g // Match \begin{...} ... \end{...}
+	];
+
+	patterns.forEach((pattern) => {
+		content = content.replace(pattern, (match:string) => {
+			return match.replace(/\s*\n\s*/g, ' ').trim();
+		});
+	});
+
+	return content;
+};
+
+export const revertSanitizedResponseContent = (content: string) => {
+	return content?.replace('&lt;', '<').replace('&gt;', '>');
+};
+
+export const sanitizeResponseContent = (content: string) => {
+	// replace single backslash with double backslash
+	content = content.replace(/\\/g, '\\\\');
+	content = convertLatexToSingleLine(content);
+
+	// First, temporarily replace valid <video> tags with a placeholder
+	const videoTagRegex = /<video\s+src="([^"]+)"\s+controls><\/video>/gi;
+	const placeholders: string[] = [];
+	content = content.replace(videoTagRegex, (_, src) => {
+		const placeholder = `{{VIDEO_${placeholders.length}}}`;
+		placeholders.push(`<video src="${src}" controls></video>`);
+		return placeholder;
+	});
+
+	// Now apply the sanitization to the rest of the content
+	content = content
+		.replace(/<\|[a-z]*$/, '')
+		.replace(/<\|[a-z]+\|$/, '')
+		.replace(/<$/, '')
+		.replace(/<\|[a-z]+\|>/g, ' ')
+		.replace('<', '&lt;')
+		.replace('>', '&gt;')
+		.trim();
+
+	// Replace placeholders with original <video> tags
+	placeholders.forEach((placeholder, index) => {
+		content = content.replace(`{{VIDEO_${index}}}`, placeholder);
+	});
+
+	return content.trim();
+};
+
+
+
 // Fomrat file size to KB or MB
 export function formatFileSize(fileSize:any) {
     if (fileSize < 1024) {
@@ -13,7 +139,7 @@ export function formatFileSize(fileSize:any) {
 
 // Get time range from timestamp 
 
-  export const getTimeRange = (timestamp) => {
+  export const getTimeRange = (timestamp:any) => {
 	const now = new Date();
 	const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
 
@@ -106,7 +232,7 @@ export const getUserPosition = async (raw = false) => {
 	}
 
 	// Extract the latitude and longitude from the position
-	const { latitude, longitude } = position.coords;
+	const { latitude, longitude } = (position as GeolocationPosition).coords;
 
 	if (raw) {
 		return { latitude, longitude };
@@ -116,7 +242,7 @@ export const getUserPosition = async (raw = false) => {
 };
 
 
-export const splitStream = (splitOn) => {
+export const splitStream = (splitOn:any) => {
 	let buffer = '';
 	return new TransformStream({
 		transform(chunk, controller) {
@@ -131,12 +257,12 @@ export const splitStream = (splitOn) => {
 	});
 };
 
-export const extractSentencesForAudio = (text) => {
-	return extractSentences(text).reduce((mergedTexts, currentText) => {
-		const lastIndex = mergedTexts.length - 1;
+export const extractSentencesForAudio = (text:any) => {
+	return extractSentences(text).reduce((mergedTexts:any, currentText) => {
+		const lastIndex:number = mergedTexts?.length - 1;
 		if (lastIndex >= 0) {
 			const previousText = mergedTexts[lastIndex];
-			const wordCount = previousText.split(/\s+/).length;
+			const wordCount = previousText?.split(/\s+/).length;
 			if (wordCount < 2) {
 				mergedTexts[lastIndex] = previousText + ' ' + currentText;
 			} else {
@@ -149,22 +275,22 @@ export const extractSentencesForAudio = (text) => {
 	}, []);
 };
 
-export const extractSentences = (text) => {
+export const extractSentences = (text:string) => {
 	// This regular expression matches code blocks marked by triple backticks
 	const codeBlockRegex = /```[\s\S]*?```/g;
 
-	let codeBlocks = [];
+	let codeBlocks:any = [];
 	let index = 0;
 
 	// Temporarily replace code blocks with placeholders and store the blocks separately
-	text = text.replace(codeBlockRegex, (match) => {
+	text = text?.replace(codeBlockRegex, (match) => {
 		let placeholder = `\u0000${index}\u0000`; // Use a unique placeholder
 		codeBlocks[index++] = match;
 		return placeholder;
 	});
 
 	// Split the modified text into sentences based on common punctuation marks, avoiding these blocks
-	let sentences = text.split(/(?<=[.!?])\s+/);
+	let sentences = text?.split(/(?<=[.!?])\s+/);
 
 	// Restore code blocks and process sentences
 	sentences = sentences.map((sentence) => {
@@ -177,11 +303,11 @@ export const extractSentences = (text) => {
 		.filter((sentence) => sentence);
 };
 
-export const removeFormattings = (str) => {
+export const removeFormattings = (str:string) => {
 	return str.replace(/(\*)(.*?)\1/g, '').replace(/(```)(.*?)\1/gs, '');
 };
 
-export const removeEmojis = (str) => {
+export const removeEmojis = (str:string) => {
 	// Regular expression to match emojis
 	const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
 
@@ -192,7 +318,7 @@ export const removeEmojis = (str) => {
 
 // copy to clipboard
 
-export const copyToClipboard = async (text) => {
+export const copyToClipboard = async (text:string) => {
 	let result = false;
 	if (!navigator.clipboard) {
 		const textArea = document.createElement('textarea');
@@ -258,7 +384,7 @@ export const approximateToHumanReadable = (nanoseconds: number) => {
 };
 
 
-export const blobToFile = (blob, fileName) => {
+export const blobToFile = (blob:Blob, fileName:string) => {
 	// Create a new File object from the Blob
 	const file = new File([blob], fileName, { type: blob.type });
 	return file;

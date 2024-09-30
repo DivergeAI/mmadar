@@ -122,7 +122,7 @@ export default function SelectMenu({
 
         {/* Add input field after the divider */}
         
- <Box m={1}>
+ {tags && <Box m={1}>
 
   <AddTags label={false} tags={tags} sx={{
     backgroundColor : 'transparent !important',
@@ -137,7 +137,7 @@ export default function SelectMenu({
       color : 'commom.black',
     }
   }}/>
- </Box>
+ </Box>}
 
 
       </Menu>

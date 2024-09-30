@@ -4,8 +4,9 @@ import UniversalButton from '../../components/common/UniversalButton';
 import { CopyAllOutlined, Delete, DeleteOutline, EditOutlined, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import Text from '../../components/common/Text';
 import useChat from './useChat';
+import { handleCopyText } from '../../utils/functions';
 
-const UserMessage = ({ index, message,confirmEditMessage, deleteMessageHandler,isFirstMessage,handleCopyText, showNextMessage, showPreviousMessage, setEditIndex, siblings, editIndex, handleCancel, handleEdit }: any) => {
+const UserMessage = ({ index, message,confirmEditMessage, deleteMessageHandler,isFirstMessage, showNextMessage, showPreviousMessage, setEditIndex, siblings, editIndex, handleCancel, handleEdit }: any) => {
   const theme = useTheme();
   const [editMessage, setEditMessage] = useState(message?.content);
   return (
@@ -123,6 +124,7 @@ const UserMessage = ({ index, message,confirmEditMessage, deleteMessageHandler,i
           >
             <Box
               sx={{
+                fontSize: '1rem',
                 width: '100%',
                 maxWidth: '100%',
                 color: 'inherit',
@@ -135,7 +137,7 @@ const UserMessage = ({ index, message,confirmEditMessage, deleteMessageHandler,i
                 '& ul': { marginTop: '-8px' },
                 '& ol': { marginTop: '-8px' },
                 '& li': { marginTop: '-12px' },
-                whiteSpace: 'pre-line',
+                whiteSpace: 'pre-wrap',
               }}
 
             >

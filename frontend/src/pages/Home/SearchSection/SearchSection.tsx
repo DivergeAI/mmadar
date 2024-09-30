@@ -1,4 +1,4 @@
-import { AddOutlined, ArrowUpwardOutlined, FileUploadSharp, Mic } from "@mui/icons-material";
+import { AddOutlined, ArrowUpwardOutlined, Cancel, FileUploadSharp, Mic } from "@mui/icons-material";
 import {
   Box,
   Icon,
@@ -12,14 +12,15 @@ import {
 } from "@mui/material";
 import { useState, useRef } from "react";
 import { Fragment } from "react/jsx-runtime";
-import Text from "../../components/common/Text";
-import UploadFileDisplay from "../../components/common/Sidebar/UploadFileDisplay";
-import { transcribeAudio } from "../../api/audio";
-import { blobToFile } from "../../utils/functions";
-import { uploadFile } from "../../api/files";
-import { API_BASE_URL, SUPPORTED_FILE_EXTENSIONS, SUPPORTED_FILE_TYPE } from "../../utils/constants";
-import { processDocToVectorDB } from "../../api/rag";
-import { FileItem } from "../../types/chat";
+import Text from "../../../components/common/Text";
+import UploadFileDisplay from "../../../components/common/Sidebar/UploadFileDisplay";
+import { transcribeAudio } from "../../../api/audio";
+import { blobToFile } from "../../../utils/functions";
+import { uploadFile } from "../../../api/files";
+import { API_BASE_URL, SUPPORTED_FILE_EXTENSIONS, SUPPORTED_FILE_TYPE } from "../../../utils/constants";
+import { processDocToVectorDB } from "../../../api/rag";
+import { FileItem } from "../../../types/chat";
+import DocumentsPopover from "./DocumentsPopover";
 
 
 
@@ -29,16 +30,16 @@ type SearchSectionProps = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   stopResponse: () => void
   files: FileItem[];
-  setFiles: (files: FileItem[]) => void;
+  setFiles: (prevFiles: FileItem[]) => void;
 };
 
 function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,setFiles }: SearchSectionProps) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  // const [files, setFiles] = useState<FileItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const open = Boolean(anchorEl);
+
   const id = open ? "simple-popover" : undefined;
 
   const handleAddFiles = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,12 +60,11 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
     // Check if the file is an audio file and transcribe/convert it to text file
     if (['audio/mpeg', 'audio/wav'].includes(file.type)) {
       const res = await transcribeAudio(localStorage.token, file).catch((error) => {
-        toast.error(error);
+        // toast.error(error);
         return null;
       });
 
       if (res) {
-        console.log(res);
         const blob = new Blob([res.text], { type: 'text/plain' });
         file = blobToFile(blob, `${file.name}.txt`);
       }
@@ -137,13 +137,28 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = event.target.files;
+
     if (newFiles) {
       const existingFiles = files;
       const updatedFiles = [...existingFiles, ...Array.from(newFiles)];
       if (updatedFiles.length > 0) {
-        updatedFiles?.forEach((file) => {
+        updatedFiles?.forEach((file:any) => {
           if (['image/gif', 'image/webp', 'image/jpeg', 'image/png'].includes(file['type'])) {
-            // image functionality herer
+            // if (visionCapableModels.length === 0) {
+              // toast.error($i18n.t('Selected model(s) do not support image inputs'));
+              // return;
+            // }
+            let reader = new FileReader();
+            reader.onload = (event) => {
+              setFiles([
+                ...files,
+                {
+                  type: 'image',
+                  url: `${event?.target?.result}`
+                }
+              ])
+            };
+            reader.readAsDataURL(file);
           } else {
             uploadFileHandler(file);
           }
@@ -155,12 +170,14 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
       setAnchorEl(null);
     }
   };
+ 
 
-
+ 
 
   return (
     <Fragment>
       <Box
+        position={'relative'}
         onSubmit={handleSubmit}
         component="form"
         display={"flex"}
@@ -171,28 +188,75 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
         <Box
           sx={{
             width: "100%",
-            padding: "0.5rem 1.25rem",
+            padding: "0.7rem 1.25rem",
             borderRadius: "1.5rem",
             backgroundColor: theme.palette.grey[200],
           }}
         >
           {files?.length > 0 && <Stack direction="row" mb={1} spacing={1} width="100%" useFlexGap flexWrap="wrap">
             {files.map((file, index) => (
-              <UploadFileDisplay key={index} file={file} removeFile={() => {
-                setFiles((prevFiles) => prevFiles.filter((item) => item.id !== file.id));
-              }} />
+              
+             file.type === 'image' ? 
+             <Box position={'relative'} width="4rem" height="4rem" borderRadius={'.75rem'}
+             sx={{
+                '&:hover #close-icon': {
+                  display : 'block',
+                }
+             }}>
+                <img src={file.url} alt={file.name} width="100%" height="100%" style={{
+                  objectFit : 'fill',
+                  borderRadius : 'inherit',
+                }} />
+                <IconButton 
+                onClick={() => 
+                setFiles(files?.filter((f) => f !== file))
+                }
+                id="close-icon"
+                sx={{
+                  position : 'absolute',
+                  top : '-5px',
+                  right : '-3px',
+                  padding : 0,
+                  display : 'none',
+                  '&:hover' : {
+                    backgroundColor :'none',
+                  }
+                }}
+                disableRipple>
+                  <Icon fontSize="small">
+                    <Cancel sx={{color:'common.white'}}/>
+                  </Icon>
+                </IconButton>
+             </Box>
+             : 
+             <UploadFileDisplay key={index} file={file} removeFile={() => {
+              setFiles(files?.filter((f) => f !== file))
+            }} />
             ))}
           </Stack>}
 
           <TextField
+          id='search-input'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             variant="outlined"
             placeholder="Search"
+            multiline
+            minRows={1}
+            maxRows={4}
+            onKeyDown={(e) => {
+              if(['/','#'].includes(e.key)){
+          // console.log("search")    
+                  }
+            }}
             fullWidth
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position="start" sx={{
+                  height:'2em !important',
+                  alignSelf:'self-end',
+                  marginRight:'0 !important',
+                }}>
                   <Tooltip title="More">
                     <IconButton onClick={handleAddFiles}>
                       <Icon fontSize="small">
@@ -217,6 +281,7 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
             sx={{
               "& .MuiOutlinedInput-root": {
                 border: "none !important",
+                padding: "0 !important",
               },
               "& fieldset": {
                 border: "none !important",
@@ -250,8 +315,16 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
             </IconButton>
           </Tooltip>
         </Box>
+
+       {search?.charAt(0) === '#' &&  
+       <DocumentsPopover 
+       setPrompt={setSearch}
+       prompt={search} setFiles={setFiles}
+       />}
+
       </Box>
 
+{/* uplaod File popover */}
       <Popover
         id={id}
         open={open}
@@ -306,6 +379,7 @@ function SearchSection({ search, setSearch, handleSubmit, stopResponse,files,set
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
+
     </Fragment>
   );
 }

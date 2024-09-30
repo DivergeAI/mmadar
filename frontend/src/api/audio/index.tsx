@@ -1,6 +1,6 @@
 import { AUDIO_API_BASE_URL } from "../../utils/constants";
 
-export const transcribeAudio = async (token: string, file: File) => {
+export const transcribeAudio = async (token: string|null, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
 

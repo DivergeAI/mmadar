@@ -2,6 +2,7 @@ import { Box, Button, Fade, Grow, Icon, Stack, useTheme } from "@mui/material";
 import Text from "../../components/common/Text";
 import { ArrowUpward } from "@mui/icons-material";
 import Image  from    "../../assets/favicon.png"
+import { useEffect } from "react";
 
 
 type NewChatPageProps = {
@@ -16,6 +17,10 @@ type Props ={
 
 const NewChatPage = ({promptSuggestions,setPrompt} : Props) => {
   const theme = useTheme();
+
+  useEffect(() => {
+    document.title = "Maadar";
+  }, []);
   return (
 
     <Stack direction={'column'} height={"100%"} gap={2} textAlign={'start'} justifyContent={'center'}>

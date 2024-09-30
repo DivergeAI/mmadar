@@ -17,8 +17,8 @@ const AddTags = ({ tags, setTags, label = true , sx}: any) => {
           <Chip
           clickable={false}
             size="small"
-            label={tag?.name}
-            key={tag?.id}
+            label={tag}
+            key={tag}
             deleteIcon={
               <Close
                 sx={{

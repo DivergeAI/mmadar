@@ -1,6 +1,6 @@
 import { RAG_API_BASE_URL } from "../../utils/constants";
 
-export const processDocToVectorDB = async (token: string, file_id: string) => {
+export const processDocToVectorDB = async (token: string | null, file_id: string) => {
 	let error = null;
 
 	const res = await fetch(`${RAG_API_BASE_URL}/process/doc`, {

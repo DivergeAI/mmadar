@@ -13,48 +13,48 @@ import SearchIcon from "@mui/icons-material/Search";
 import ChatItem from "./ChatItem";
 import { NavLink, useNavigate } from "react-router-dom";
 import SelectMenu from "../SelectMenu";
-import { AdminPanelSettings, ArchiveOutlined, BookmarkBorderOutlined, Code, CreateOutlined, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
+import { AdminPanelSettings, ArchiveOutlined, Code, LogoutRounded, MoreHoriz, SettingsOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import SettingsModal from "../../Settings";
 import { getAllChatTags, getChatList, getChatListByTagName } from "../../../api/chats";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import UniversalButton from "../UniversalButton";
 
 
 function PermenentSidebar() {
-  let token:string = localStorage.getItem('token');
+  let token: string|undefined = localStorage.getItem('token') || undefined;
   const theme = useTheme();
   const navigate = useNavigate()
-  const [openSetting,setOpenSetting] =useState(false)
+  const [openSetting, setOpenSetting] = useState(false)
 
-const {data:AllChats} = useQuery({
-  queryKey :[ 'chatList'],
-  queryFn : ()=> getChatList(token),
-  retry : 1
-})
+  const { data: AllChats } = useQuery({
+    queryKey: ['chatList'],
+    queryFn: () => getChatList(token),
+    retry: 1
+  })
 
-const {data : AllPinnedTags} = useQuery({
-  queryKey :[ 'pinnedTags'],
-  queryFn : ()=> getChatListByTagName(token,'pinned'),
-  retry : 1
-})
+  const { data: AllPinnedTags } = useQuery({
+    queryKey: ['pinnedTags'],
+    queryFn: () => getChatListByTagName(token, 'pinned'),
+    retry: 1
+  })
 
-const {data: AllTags} = useQuery({
-  queryKey :[ 'tags'],
-  queryFn : ()=> getAllChatTags(token),
-  retry : 1
-})
+  const { data: AllTags } = useQuery({
+    queryKey: ['tags'],
+    queryFn: () => getAllChatTags(token),
+    retry: 1
+  })
 
   const controls = [
     {
       name: "Settings",
       icon: <SettingsOutlined />,
-      onClick: () =>setOpenSetting(true), 
+      onClick: () => setOpenSetting(true),
     },
     {
       name: "Archived Chats",
       icon: <ArchiveOutlined />,
-      onClick : ()=>{}
+      onClick: () => { }
     },
     {
       name: "Playground",
@@ -113,17 +113,17 @@ const {data: AllTags} = useQuery({
           alignItems="center"
           gap={1}
         >
-          <Box 
-          component={NavLink}
-          to="/"
-          display="flex" alignItems="center" p={1} gap={2} flexGrow={1}
-          sx={{
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: theme.palette.grey[300],
-              borderRadius: "12px",
-            },
-          }}>
+          <Box
+            component={NavLink}
+            to="/"
+            display="flex" alignItems="center" p={1} gap={2} flexGrow={1}
+            sx={{
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: theme.palette.grey[300],
+                borderRadius: "12px",
+              },
+            }}>
             <img
               src="../src/assets/favicon.png"
               alt="Logo"
@@ -164,8 +164,8 @@ const {data: AllTags} = useQuery({
 
         {/* WorkSpace */}
         <Box
-        component={NavLink}
-        to="/workspace"
+          component={NavLink}
+          to="/workspace"
           sx={{
             p: 1,
             cursor: "pointer",
@@ -183,20 +183,21 @@ const {data: AllTags} = useQuery({
               height="17.6px"
             />
             <Text fontWeight="500" color={theme.palette.grey[800]}>
-              WorkSpace
-            </Text>
+Documents            </Text>
           </Box>
         </Box>
 
         {/* Search */}
-        <Box sx={{ p: 1 }}>
+        <Box sx={{}}>
           <TextField
             variant="outlined"
             placeholder="Search"
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <Icon>
+                <InputAdornment position="start" sx={{
+                  marginRight: 0,
+                }}>
+                  <Icon fontSize = 'small'>
                     <SearchIcon />
                   </Icon>
                 </InputAdornment>
@@ -204,6 +205,8 @@ const {data: AllTags} = useQuery({
             }}
             sx={{
               "& .MuiOutlinedInput-root": {
+                lineHeight: "1rem",
+                
                 border: "none !important",
               },
               "& fieldset": {
@@ -226,70 +229,70 @@ const {data: AllTags} = useQuery({
           }}
         >
           <Box>
-         {AllTags?.length > 0 &&  <UniversalButton 
-label = {'all'}
-backgroundColor="transparent"
-border="none"
-textColor="grey.800"
-fontSize={'.75rem'}
-sx={{
-  minWidth : 'fit-content',
-  lineHeight : '1rem',
-  padding :'0 .5rem'
-}}
-/>}
-            {AllTags?.length> 0 && AllTags.map((tag:any,index : number)=>(
-<UniversalButton 
-label = {tag.name !== 'pinned' && tag.name }
-backgroundColor="transparent"
-border="none"
-textColor="grey.800"
-fontSize={'.75rem'}
-sx={{
-  minWidth : 'fit-content',
-  lineHeight : '1rem',
-  padding :'0 .5rem'
-}}
-/>
+            {AllTags?.length > 0 && <UniversalButton
+              label={'all'}
+              backgroundColor="transparent"
+              border="none"
+              textColor="grey.800"
+              fontSize={'.75rem'}
+              sx={{
+                minWidth: 'fit-content',
+                lineHeight: '1rem',
+                padding: '0 .5rem'
+              }}
+            />}
+            {AllTags?.length > 0 && AllTags.map((tag: any, index: number) => (
+              <UniversalButton
+                label={tag.name !== 'pinned' && tag.name}
+                backgroundColor="transparent"
+                border="none"
+                textColor="grey.800"
+                fontSize={'.75rem'}
+                sx={{
+                  minWidth: 'fit-content',
+                  lineHeight: '1rem',
+                  padding: '0 .5rem'
+                }}
+              />
             ))}
           </Box>
 
           {/* Pinned */}
 
-{AllPinnedTags?.length> 0 &&
-          <Box 
-          display={'flex'}
-          flexDirection={'column'}
-          gap={'.2rem'}>
-  <Text fontSize = '.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{my :1}}>
-Pinned    </Text>
+          {AllPinnedTags?.length > 0 &&
+            <Box
+              display={'flex'}
+              flexDirection={'column'}
+              gap={'.2rem'}>
+              <Text fontSize='.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{ my: 1 }}>
+                Pinned    </Text>
 
-          { AllPinnedTags.map((chat:any,index : number)=>(
+              {AllPinnedTags.map((chat: any, index: number) => (
 
-      <ChatItem key={chat.id} data = {chat} index={index}/>
+                <ChatItem key={chat.id} data={chat} index={index} />
 
-    ))}
-</Box>
-}
-         <Box display={'flex'}
-          flexDirection={'column'}
-          gap={'.2rem'}>
+              ))}
+            </Box>
+          }
+          <Box display={'flex'}
+            flexDirection={'column'}
+            gap={'.2rem'}>
 
-          {AllChats?.length> 0 && AllChats.map((chat:any,index : number)=>(
-          <Box 
-          key={chat.id}
-          >
-  { chat?.time_range !== AllChats[index-1]?.time_range && 
-  <Text fontSize = '.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{my :1}}>
-    {chat?.time_range}
-    </Text>
-}
+            {AllChats?.length > 0 && AllChats.map((chat: any, index: number) => (
+              <Box
+                key={chat.id}
+              >
+                {chat?.time_range !== AllChats[index - 1]?.time_range &&
+                  <Text fontSize='.75rem' fontWeight="600" color={theme.palette.grey[700]} sx={{ my: 1 }}>
+                    {chat?.time_range}
+                  </Text>
+                }
 
-      <ChatItem  data = {chat} />
+                <ChatItem data={chat} />
 
-</Box>
-    ))}
-         </Box>
+              </Box>
+            ))}
+          </Box>
         </Box>
 
         {/* Bottom - User Avatar and Menu */}
@@ -304,21 +307,21 @@ Pinned    </Text>
             mt: 2,
           }}
         >
-         
-            <SelectMenu 
+
+          <SelectMenu
             options={controls}
-            icon={ <Box display="flex" alignItems="center" gap={2}> <Avatar />
-            <Text fontWeight="600" color={theme.palette.grey[800]}>
-              User Name
-            </Text>
-          </Box>}
+            icon={<Box display="flex" alignItems="center" gap={2}> <Avatar />
+              <Text fontWeight="600" color={theme.palette.grey[800]}>
+                User Name
+              </Text>
+            </Box>}
           />
-           
+
         </Box>
       </Box>
-      <SettingsModal 
-      open ={openSetting}
-      onClose={()=>setOpenSetting(false)}
+      <SettingsModal
+        open={openSetting}
+        onClose={() => setOpenSetting(false)}
       />
     </Drawer>
   );

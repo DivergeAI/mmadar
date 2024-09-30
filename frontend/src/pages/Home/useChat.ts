@@ -44,15 +44,15 @@ const useChat = (initialChatId = "") => {
   const eventTarget = new EventTarget();
 
   useEffect(() => {
-    if (history.currentId !== null) {
+    if (history?.currentId !== null) {
       let _messages: any[] = [];
 
-      let currentMessage = history.messages[history.currentId];
+      let currentMessage = history?.messages[history?.currentId];
       while (currentMessage !== null) {
         _messages.unshift({ ...currentMessage });
         currentMessage =
           currentMessage?.parentId !== null
-            ? history.messages[currentMessage?.parentId]
+            ? history?.messages[currentMessage?.parentId]
             : null;
       }
       setMessages(_messages);
@@ -64,7 +64,7 @@ const useChat = (initialChatId = "") => {
   // Listen to changes in history.messages
 
 
-  const { data: SingleChatData ,refetch : RefetchSingleChatData} = useQuery({
+  const { data: SingleChatData } = useQuery({
     queryKey: ["chat", initialChatId||chatId],
     queryFn: () => getChatById(token, initialChatId),
     enabled: initialChatId !== "",
@@ -98,7 +98,6 @@ const useChat = (initialChatId = "") => {
       setMessages(SingleChatData?.chat?.messages);
       setHistory(SingleChatData?.chat?.history);
       setSelectedModels(SingleChatData?.chat?.models);
-      console.log("singleData",SingleChatData)
     }
   }, [SingleChatData]);
 
@@ -154,8 +153,6 @@ const useChat = (initialChatId = "") => {
           ],
         };
       }
-      console.log("History before adding new data", history.messages)
-      console.log("___history before adding new data", _history?.messages)
 
       //   setHistory(_history);
 
@@ -530,7 +527,7 @@ const useChat = (initialChatId = "") => {
               }
             }
           }
-        } catch (error) {
+        } catch (error:any) {
           console.log(error);
           if ("detail" in error) {
             alert(error.detail);
@@ -604,7 +601,6 @@ const useChat = (initialChatId = "") => {
       _messages?.at(1).content !== "" &&
       selectedModels?.[0] === model.id
     ) {
-      console.log("section 1 Called");
       navigate(`/chat/${chatId}`);
       //   window.history.replaceState(history.state, "", `/chat/${chatId}`);
       const _title = await generateChatTitle(prompt);
@@ -628,6 +624,7 @@ const useChat = (initialChatId = "") => {
   };
 
   const generateChatTitle = async (userPrompt: string) => {
+    console.log("generateChatTitle called -------->");
     if (settings?.title?.auto ?? true) {
       const title = await generateTitle(
         localStorage.token,
@@ -646,6 +643,8 @@ const useChat = (initialChatId = "") => {
   };
 
   const setChatTitle = async (_chatId: any, _title: string) => {
+
+    console.log("setChatTitle called -------->");
     // if ((_chatId === chatId && settings?.saveChatHistory) ?? true) {
     let payload = {
       token: localStorage.token,
@@ -662,19 +661,16 @@ const useChat = (initialChatId = "") => {
   };
 
   //   chat completed handler function called inside sendPromptOllama
-  const chatCompletedHandler = async (
-    chatId,
-    modelId,
-    responseMessageId,
-    messages,
-    history
+  const chatCompletedHandler = async (chatId : string, modelId : string,responseMessageId:string, messages : any,history:any
   ) => {
     // await mermaid.run({
     // 	querySelector: '.mermaid'
     // });
+
+    console.log("chatCompletedHandler called -------->"); 
     const res = await chatCompleted(localStorage.token, {
       model: modelId,
-      messages: messages.map((m) => ({
+      messages: messages.map((m:any) => ({
         id: m.id,
         role: m.role,
         content: m.content,
@@ -697,7 +693,7 @@ const useChat = (initialChatId = "") => {
       for (const message of res.messages) {
         history.messages[message.id] = {
           ...history.messages[message.id],
-          ...(history.messages[message.id].content !== message.content
+          ...(history?.messages[message.id].content !== message.content
             ? { originalContent: history.messages[message.id].content }
             : {}),
           ...message,
@@ -730,7 +726,7 @@ const useChat = (initialChatId = "") => {
       queryClient.invalidateQueries({
         queryKey: ["chatList"],
       });
-      RefetchSingleChatData()
+      // RefetchSingleChatData()
     },
   });
   // stop Response
@@ -741,11 +737,11 @@ const useChat = (initialChatId = "") => {
 
   const showPreviousMessage = async (message:Object) => {
 
-    if (message.parentId !== null) {
+    if (message?.parentId !== null) {
       console.log("message ata prev messgae", message)
       let messageId =
-        history.messages[message.parentId].childrenIds[
-        Math.max(history.messages[message.parentId].childrenIds.indexOf(message.id) - 1, 0)
+        history.messages[message?.parentId].childrenIds[
+        Math.max(history.messages[message?.parentId].childrenIds.indexOf(message.id) - 1, 0)
         ];
 
       if (message.id !== messageId) {
@@ -783,7 +779,7 @@ const useChat = (initialChatId = "") => {
 
   };
 
-  const showNextMessage = async (message:Object) => {
+  const showNextMessage = async (message:any) => {
     if (message.parentId !== null) {
       let messageId =
         history.messages[message.parentId].childrenIds[
@@ -807,11 +803,10 @@ const useChat = (initialChatId = "") => {
 
       }
     } else {
-      console.log("message ata next messgae", message)
 
       let childrenIds = Object.values(history.messages)
-        .filter((message) => message?.parentId === null)
-        .map((message) => message?.id);
+        .filter((message:any) => message?.parentId === null)
+        .map((message:any) => message?.id);
       console.log("childre Id", childrenIds)
 
 
@@ -867,14 +862,13 @@ const useChat = (initialChatId = "") => {
 
   // regenerate Resposne
 
-  const regenerateResponse = async (message:Object) => {
-    console.log('regenerateResponse');
+  const regenerateResponse = async (message:any) => {
 
-    if (messages.length != 0) {
-      let userMessage = history.messages[message.parentId];
+    if (messages?.length != 0) {
+      let userMessage = history?.messages[message.parentId];
       let userPrompt = userMessage.content;
 
-      if ((userMessage?.models ?? [...selectedModels]).length == 1) {
+      if ((userMessage?.models ?? [...(selectedModels || [])]).length == 1) {
         // If user message has only one model selected, sendPrompt automatically selects it for regeneration
         await sendPrompt(userPrompt, userMessage.id);
       } else {
@@ -906,7 +900,7 @@ const useChat = (initialChatId = "") => {
     _history.messages[parentMessageId].childrenIds = _history?.messages[parentMessageId]?.childrenIds?.filter((childId:string) => childId !== messageId)
 
 
-    childMessageIds.forEach((childId) => {
+    childMessageIds.forEach((childId:string) => {
 			const childMessage = _history.messages[childId];
 
 			if (childMessage && childMessage.childrenIds) {
@@ -914,7 +908,7 @@ const useChat = (initialChatId = "") => {
 					// If there are no other responses/prompts
 					history.messages[parentMessageId].childrenIds = [];
 				} else {
-					childMessage.childrenIds.forEach((grandChildId) => {
+					childMessage.childrenIds.forEach((grandChildId:string) => {
 						if (_history.messages[grandChildId]) {
 							_history.messages[grandChildId].parentId = parentMessageId;
 							_history.messages[parentMessageId].childrenIds.push(grandChildId);
@@ -926,7 +920,7 @@ const useChat = (initialChatId = "") => {
 			// Remove child message id from the parent message's children array
 			_history.messages[parentMessageId].childrenIds = history.messages[
 				parentMessageId
-			].childrenIds.filter((id) => id !== childId);
+			].childrenIds.filter((id:string) => id !== childId);
 		});
 
 let payload = {
@@ -938,19 +932,18 @@ let payload = {
   }
 }
 
-console.log("payload", payload)
     await updateChatByIdMutation(payload)
-    console.log("has decende",hasDescendantMessages)
-    console.log("messageToDelete", messageToDelete)
-    console.log("parentMessageIds", parentMessageId)
+    
   }
 
   let chat = {
     chat: {
+      title: SingleChatData?.chat?.title,
       messages,
       history,
     },
   };
+
 
 
   return {

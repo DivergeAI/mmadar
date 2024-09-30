@@ -135,17 +135,17 @@ const{mutate : ChangeChatTitleMutation} =useMutation({
             icon: <ArchiveOutlined />,
             onClick: () => ArchieveChatMutation({token, id : data.id}),
         },
-        {
-            name: "Share",
-            icon: <Share />,
-            onClick: () => console.log("Share clicked"),
-        },
+        // {
+        //     name: "Share",
+        //     icon: <Share />,
+        //     onClick: () => console.log("Share clicked"),
+        // },
         {
             name: "Delete",
             icon: <Delete />,
             onClick: () => setOpen(true),
-            divider: true,
-            tag : true
+            // divider: true,
+            // tag : true
         },
 
     ];
@@ -293,7 +293,7 @@ const{mutate : ChangeChatTitleMutation} =useMutation({
             // Prevent the icon from shrinking
           }}
         >
-          <SelectMenu options={options} tags ={tags} />
+          <SelectMenu options={options}  />
         </Box>
         {/* </Tooltip> */}
       </Box>

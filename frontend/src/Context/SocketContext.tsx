@@ -8,7 +8,7 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const newSocket = io(BASE_URL, {
+        const newSocket = io(BASE_URL || undefined, {
             path: '/ws/socket.io',
             auth: { token: localStorage.getItem('token') },
             // withCredentials :true
@@ -17,6 +17,7 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 
         newSocket.on('connect', () => {
+            console.log('Connected to socket server');
         });
 
         

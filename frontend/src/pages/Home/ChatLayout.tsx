@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import HeaderSection from '../Home/HeaderSection';
 import ChatSection from '../Home/ChatSection';
-import SearchSection from '../Home/SearchSection';
+import SearchSection from './SearchSection/SearchSection';
 import Text from '../../components/common/Text';
 import NewChatPage from './NewChatPage';
 import { FileItem } from '../../types/chat';

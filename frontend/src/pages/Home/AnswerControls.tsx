@@ -15,25 +15,25 @@ function AnswerControls({ siblings, handleCopyText, message, regenerateResponse,
   let tooltipContent = `response_token/s: ${`${Math.round(
     ((message?.info?.eval_count ?? 0) / (message?.info?.eval_duration / 1000000000)) * 100
   ) / 100
-    } tokens` ?? 'N/A'
+    } tokens` || 'N/A'
     }<br/>
     prompt_token/s: ${Math.round(
       ((message?.info?.prompt_eval_count ?? 0) /
         (message?.info?.prompt_eval_duration / 1000000000)) *
       100
-    ) / 100 ?? 'N/A'
+    ) / 100 || 'N/A'
     } tokens<br/>
-              total_duration: ${Math.round(((message?.info?.total_duration ?? 0) / 1000000) * 100) / 100 ??
+              total_duration: ${Math.round(((message?.info?.total_duration || 0) / 1000000) * 100) / 100 ||
     'N/A'
     }ms<br/>
-              load_duration: ${Math.round(((message?.info?.load_duration ?? 0) / 1000000) * 100) / 100 ?? 'N/A'
+              load_duration: ${Math.round(((message?.info?.load_duration || 0) / 1000000) * 100) / 100 || 'N/A'
     }ms<br/>
-              prompt_eval_count: ${message?.info?.prompt_eval_count ?? 'N/A'}<br/>
+              prompt_eval_count: ${message?.info?.prompt_eval_count || 'N/A'}<br/>
               prompt_eval_duration: ${Math.round(((message?.info?.prompt_eval_duration ?? 0) / 1000000) * 100) /
-    100 ?? 'N/A'
+    100 || 'N/A'
     }ms<br/>
-              eval_count: ${message?.info?.eval_count ?? 'N/A'}<br/>
-              eval_duration: ${Math.round(((message?.info?.eval_duration ?? 0) / 1000000) * 100) / 100 ?? 'N/A'
+              eval_count: ${message?.info?.eval_count || 'N/A'}<br/>
+              eval_duration: ${Math.round(((message?.info?.eval_duration ?? 0) / 1000000) * 100) / 100 || 'N/A'
     }ms<br/>
               approximate_total: ${approximateToHumanReadable(message?.info?.total_duration)}`;
 
@@ -48,38 +48,38 @@ function AnswerControls({ siblings, handleCopyText, message, regenerateResponse,
       title: "Copy",
       onClick: handleCopyText
     },
-    {
-      icon: <Info />,
-      title: "Generation Info",
-      info: <Markdown>
-        {tooltipContent}
-      </Markdown>,
-      onClick: () => console.log('Read Aloud clicked')
-    },
-    {
-      icon: <VolumeUpOutlined />,
-      title: "Read Aloud",
-      onClick: () => console.log('Read Aloud clicked')
-    },
-    {
-      icon: <ThumbUpOffAlt />,
-      title: "Good Response",
-      onClick: () => setResponseType(responseType === 'good' ? null : 'good'),
-      active: responseType === 'good'
-    },
-    {
-      icon: <ThumbDownOffAlt />,
-      title: "Bad Response",
-      onClick: () => setResponseType(responseType === 'bad' ? null : 'bad'),
-      active: responseType === 'bad'
-    },
+    // {
+    //   icon: <Info />,
+    //   title: "Generation Info",
+    //   info: <Markdown>
+    //     {tooltipContent}
+    //   </Markdown>,
+    //   onClick: () => console.log('Read Aloud clicked')
+    // },
+    // {
+    //   icon: <VolumeUpOutlined />,
+    //   title: "Read Aloud",
+    //   onClick: () => console.log('Read Aloud clicked')
+    // },
+    // {
+    //   icon: <ThumbUpOffAlt />,
+    //   title: "Good Response",
+    //   onClick: () => setResponseType(responseType === 'good' ? null : 'good'),
+    //   active: responseType === 'good'
+    // },
+    // {
+    //   icon: <ThumbDownOffAlt />,
+    //   title: "Bad Response",
+    //   onClick: () => setResponseType(responseType === 'bad' ? null : 'bad'),
+    //   active: responseType === 'bad'
+    // },
     ...(isLastMessage ? [
-      {
-        icon: <PlayCircleOutline />,
-        title: "Continue Response",
-        onClick: () => console.log('Continue Response clicked')
+      // {
+      //   icon: <PlayCircleOutline />,
+      //   title: "Continue Response",
+      //   onClick: () => console.log('Continue Response clicked')
 
-      },
+      // },
       {
         icon: <Cached />,
         title: "Regenerate",
